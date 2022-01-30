@@ -37,21 +37,21 @@ do
 	curl https://localhost:4757
 	if (($? != 0))
 	then
-		date >> curl.log
+	  date >> curl.log
 	fi
 done
 ```
 
 ### Ваш скрипт:
 ```bash
-while ((1==1))              #круглая скобка, которая закрывает отсутствовала
+while ((1==1))		#круглая скобка, которая закрывает отсутствовала
 	do
 	  curl https://localhost:4757
 	if (($? != 0))
 	then
 	  date >> curl.log
 	else                        
-	  break                     #условие выхода отсутствовало
+	  break		#условие выхода отсутствовало
 	fi
 	done
 ```
