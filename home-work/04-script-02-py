@@ -48,7 +48,18 @@ for result in result_os.split('\n'):
 
 ### Ваш скрипт:
 ```python
-???
+
+cmd = os.getcwd()
+if len(sys.argv)>=2:
+    cmd = sys.argv[1]
+bash_command = ["cd "+cmd, "git status 2>&1"]
+result_os = os.popen(' && '.join(bash_command)).read()
+for result in result_os.split('\n'):
+    if result.find('fatal') != -1:
+        print(cmd+" git не найден")
+    if result.find('изменен') != -1:
+        prepare_result = result.replace('\изменен:   ', '')
+        print(prepare_result)
 ```
 
 ### Вывод скрипта при запуске при тестировании:
@@ -61,12 +72,35 @@ for result in result_os.split('\n'):
 
 ### Ваш скрипт:
 ```python
-???
+#!/usr/bin/env python3
+
+import os
+import sys
+
+basedir = ""
+try:
+    basedir = sys.argv[1]
+except:
+    print("Incorrect repository path")
+if basedir != "":
+    cmd = os.getcwd()
+    if len(sys.argv)>=2:
+        cmd = sys.argv[1]
+    bash_command = ["cd "+cmd, "git status 2>&1"]
+    result_os = os.popen(' && '.join(bash_command)).read()
+    for result in result_os.split('\n'):
+        if result.find('fatal') != -1:
+            print(cmd+" git не найден")
+        if result.find('изменен') != -1:
+            prepare_result = result.replace('\изменен:   ', '')
+            print(prepare_result)
+
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+PS D:\git>  d:; cd 'd:\git'; & 'C:\Users\kadannr\AppData\Local\Programs\Python\Python310\python.exe' 'c:\Users\kadannr\.vscode\extensions\ms-python.python-2021.12.1559732655\pythonFiles\lib\python\debugpy\launcher' '53759' '--' 'd:\git\devops-netology\py2.py' 
+Incorrect repository path
 ```
 
 ## Обязательная задача 4
