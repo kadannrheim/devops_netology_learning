@@ -41,7 +41,7 @@ result_os = os.popen(' && '.join(bash_command)).read()
 is_change = False
 for result in result_os.split('\n'):
     if result.find('modified') != -1:
-        prepare_result = result.replace('\tmodified:   ', '')
+        prepare_result = result.replace('\tmodified: ', '')
         print(prepare_result)
         break
 ```
@@ -58,13 +58,14 @@ for result in result_os.split('\n'):
     if result.find('fatal') != -1:
         print(cmd+" git не найден")
     if result.find('изменен') != -1:
-        prepare_result = result.replace('\изменен:   ', '')
+        prepare_result = result.replace('\nизменен: ', '')
         print(prepare_result)
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+PS D:\git\devops-netology>  d:; cd 'd:\git'; & 'C:\Users\kadannr\AppData\Local\Programs\Python\Python310\python.exe' 'c:\Users\kadannr\.vscode\extensions\ms-python.python-2021.12.1559732655\pythonFiles\lib\python\debugpy\launcher' '54890' '--' 'd:\git\devops-netology\py2.py' 
+PS D:\git> 
 ```
 
 ## Обязательная задача 3
@@ -92,7 +93,7 @@ if basedir != "":
         if result.find('fatal') != -1:
             print(cmd+" git не найден")
         if result.find('изменен') != -1:
-            prepare_result = result.replace('\изменен:   ', '')
+            prepare_result = result.replace('\nизменен:   ', '')
             print(prepare_result)
 
 ```
@@ -108,12 +109,31 @@ Incorrect repository path
 
 ### Ваш скрипт:
 ```python
-???
+#!/usr/bin/env python3
+
+import socket
+import time
+
+servers = {"drive.google.com": "", "mail.google.com": "", "google.com": ""}
+while True:
+    for url, ip in servers.items():
+        ip_addr = socket.gethostbyname(url)
+        if ip == "":
+            servers[url] = ip_addr
+            print("{} : {}".format(url, ip_addr))
+        elif ip != ip_addr:
+            print("[ERROR] {} IP mismatch: {} -> {}".format(url, ip, ip_addr))
+            servers[url] = ip_addr
+    break
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+PS D:\git>  d:; cd 'd:\git'; & 'C:\Users\kadannr\AppData\Local\Programs\Python\Python310\python.exe' 'c:\Users\kadannr\.vscode\extensions\ms-python.python-2021.12.1559732655\pythonFiles\lib\python\debugpy\launcher' '51432' '--' 'd:\git\devops-netology\py2.py'
+drive.google.com : 64.233.163.194
+mail.google.com : 216.58.210.165
+google.com : 216.58.210.174
+PS D:\git> 
 ```
 
 ## Дополнительное задание (со звездочкой*) - необязательно к выполнению
