@@ -164,3 +164,54 @@ Updating certificates in /etc/ssl/certs...
 Running hooks in /etc/ca-certificates/update.d...
 done.
 
+6.Установите nginx.
+heim@crow2:~$ sudo apt install nginx
+heim@crow2:~$ sudo ufw app list
+Available applications:
+  Nginx Full
+  Nginx HTTP
+  Nginx HTTPS
+  OpenSSH
+heim@crow2:~$ sudo ufw allow 'Nginx Full'
+Rule added
+Rule added (v6)
+heim@crow2:~$ systemctl status nginx
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sat 2022-02-12 20:01:05 UTC; 30s ago
+       Docs: man:nginx(8)
+   Main PID: 102201 (nginx)
+      Tasks: 2 (limit: 955)
+     Memory: 3.9M
+     CGroup: /system.slice/nginx.service
+             ├─102201 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+             └─102202 nginx: worker process
+
+фев 12 20:01:05 crow2 systemd[1]: Starting A high performance web server and a reverse proxy server.>
+фев 12 20:01:05 crow2 systemd[1]: Started A high performance web server and a reverse proxy server.
+lines 1-13/13 (END)
+
+  
+7.По инструкции (ссылка) настройте nginx на https, используя ранее подготовленный сертификат:
+heim@crow2:~$ sudo mkdir /etc/nginx/ssl
+heim@crow2:~$ sudo cp test.example.com.crt /etc/nginx/ssl
+heim@crow2:~$ sudo cp test.example.com.key /etc/nginx/ssl
+heim@crow2:~$ sudo nano /etc/nginx/sites-enabled/default
+...
+listen 443 ssl default_server;
+server_name       test.example.com;
+ssl_certificate     /etc/nginx/ssl/test.example.com.crt;
+ssl_certificate_key /etc/nginx/ssl/test.example.com.key;
+...
+
+8.Откройте в браузере на хосте https адрес страницы, которую обслуживает сервер nginx.
+Welcome to nginx!
+If you see this page, the nginx web server is successfully installed and working. Further configuration is required.
+
+For online documentation and support please refer to nginx.org.
+Commercial support is available at nginx.com.
+
+Thank you for using nginx.
+![image](https://user-images.githubusercontent.com/67197701/153726783-5162fbb1-ac6c-412b-9f55-c4938d88170a.png)
+
+9.Создайте скрипт, который будет генерировать новый сертификат в vault:
