@@ -215,8 +215,9 @@ For online documentation and support please refer to nginx.org.
 Commercial support is available at nginx.com.
 
 Thank you for using nginx.
-![image](https://user-images.githubusercontent.com/67197701/153726783-5162fbb1-ac6c-412b-9f55-c4938d88170a.png)
 ```
+![image](https://user-images.githubusercontent.com/67197701/153726783-5162fbb1-ac6c-412b-9f55-c4938d88170a.png)
+
 
 9.Создайте скрипт, который будет генерировать новый сертификат в vault:
 ```
