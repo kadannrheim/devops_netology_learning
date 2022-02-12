@@ -1,4 +1,6 @@
+
 1.Создайте виртуальную машину Linux.
+```
 heim@crow2:~$ lsb_release -a
 No LSB modules are available.
 Distributor ID: Ubuntu
@@ -7,9 +9,9 @@ Release:        20.04
 Codename:       focal
 heim@crow2:~$ uname -a
 Linux crow2 5.4.0-94-generic #106-Ubuntu SMP Thu Jan 6 23:58:14 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
-
-'''
+```
 2.Установите ufw и разрешите к этой машине сессии на порты 22 и 443, при этом трафик на интерфейсе localhost (lo) должен ходить свободно на все порты.
+```
 heim@crow2:~$ sudo ufw allow 22
 Rules updated
 Rules updated (v6)
@@ -31,7 +33,7 @@ To                         Action      From
 22 (v6)                    ALLOW       Anywhere (v6)
 443 (v6)                   ALLOW       Anywhere (v6)
 
-...
+```
 3.Установите hashicorp vault (инструкция по ссылке).
 heim@crow2:~$ curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 OK
