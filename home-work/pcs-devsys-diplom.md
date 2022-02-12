@@ -215,3 +215,22 @@ Thank you for using nginx.
 ![image](https://user-images.githubusercontent.com/67197701/153726783-5162fbb1-ac6c-412b-9f55-c4938d88170a.png)
 
 9.Создайте скрипт, который будет генерировать новый сертификат в vault:
+heim@crow2:~$ cat cert_update.sh
+#!/bin/bash
+json_cert=`vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h"`
+echo $json_cert|jq -r '.data.certificate'>test.example.com.crt
+echo $json_cert|jq -r '.data.private_key'>test.example.com.key
+sudo cp test.example.com.crt /etc/nginx/ssl
+sudo cp test.example.com.key /etc/nginx/ssl
+sudo systemctl restart nginx
+heim@crow2:~$ chmod 755 cert_update.sh
+heim@crow2:~$ ./cert_update.sh
+
+10.Поместите скрипт в crontab, чтобы сертификат обновлялся какого-то числа каждого месяца в удобное для вас время.
+heim@crow2:~$ sudo systemctl enable cron
+Synchronizing state of cron.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable cron
+heim@crow2:~$ date
+Сб 12 фев 2022 21:41:37 UTC
+heim@crow2:~$ nano crontab -e
+30 21 1 * * /home/heim/cert_update.sh
