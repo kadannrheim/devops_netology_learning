@@ -83,99 +83,84 @@ heim@crow2:~$ systemctl status vault
 
 ...
 4.Cоздайте центр сертификации по инструкции (ссылка) и выпустите сертификат для использования его в настройке веб-сервера nginx (срок жизни сертификата - месяц).
-heim@crow2:~$ sudo vault server -dev
-heim@crow2:~$ sudo nano /etc/vault.d/vault.hcl
-heim@crow2:~$ cat /etc/vault.d/vault.hcl
----
 
-# HTTP listener
-listener "tcp" {
-  address = "127.0.0.1:8210"
-  tls_disable = 1
+heim@crow2:~$ export VAULT_ADDR=http://127.0.0.1:8200
+heim@crow2:~$ export VAULT_TOKEN=root
+heim@crow2:~$ tee admin-policy.hcl <<EOF
+> # Enable secrets engine
+> path "sys/mounts/*" {
+> capabilities = [ "create", "read", "update", "delete", "list" ]
+> }
+> # List enabled secrets engine
+> path "sys/mounts" {
+> capabilities = [ "read", "list" ]
+> }
+> # Work with pki secrets engine
+> path "pki*" {
+> capabilities = [ "create", "read", "update", "delete", "list", "sudo" ]
+> }
+> EOF
+# Enable secrets engine
+path "sys/mounts/*" {
+capabilities = [ "create", "read", "update", "delete", "list" ]
 }
-
-# HTTPS listener
-listener "tcp" {
-  address       = "0.0.0.0:8211"
-  tls_cert_file = "/opt/vault/tls/tls.crt"
-  tls_key_file  = "/opt/vault/tls/tls.key"
+# List enabled secrets engine
+path "sys/mounts" {
+capabilities = [ "read", "list" ]
 }
+# Work with pki secrets engine
+path "pki*" {
+capabilities = [ "create", "read", "update", "delete", "list", "sudo" ]
+}
+heim@crow2:~$ vault policy write admin admin-policy.hcl
+Success! Uploaded policy: admin
+heim@crow2:~$ vault secrets enable pki
+Success! Enabled the pki secrets engine at: pki/
+heim@crow2:~$ vault secrets tune -max-lease-ttl=87600h pki
+Success! Tuned the secrets engine at: pki/
+heim@crow2:~$ vault write -field=certificate pki/root/generate/internal \
+> common_name="example.com" \
+> ttl=87600h > ca_cert.crt
+heim@crow2:~$ vault write pki/config/urls \
+> issuing_certificates="$VAULT_ADDR/v1/pki/ca" \
+> crl_distribution_points="$VAULT_ADDR/v1/pki/crl"
+Success! Data written to: pki/config/urls
+heim@crow2:~$ vault secrets enable -path=pki_int pki
+Success! Enabled the pki secrets engine at: pki_int/
+heim@crow2:~$ vault secrets tune -max-lease-ttl=43800h pki_int
+Success! Tuned the secrets engine at: pki_int/
+heim@crow2:~$ vault write -format=json pki_int/intermediate/generate/internal \
+> common_name="example.com Intermediate Authority" \
+> | jq -r '.data.csr' > pki_intermediate.csr
+heim@crow2:~$ vault write -format=json pki/root/sign-intermediate csr=@pki_intermediate.csr \
+> format=pem_bundle ttl="43800h" \
+> | jq -r '.data.certificate' > intermediate.cert.pem
+heim@crow2:~$ vault write pki_int/intermediate/set-signed certificate=@intermediate.cert.pem
+Success! Data written to: pki_int/intermediate/set-signed
+heim@crow2:~$ vault write pki_int/config/urls \
+> issuing_certificates="$VAULT_ADDR/v1/pki_int/ca" \
+> crl_distribution_points="$VAULT_ADDR/v1/pki_int/crl"
+Success! Data written to: pki_int/config/urls
+heim@crow2:~$ vault write pki_int/roles/example-dot-com \
+> allowed_domains="example.com" \
+> allow_subdomains=true \
+> max_ttl="720h"
+Success! Data written to: pki_int/roles/example-dot-com
+heim@crow2:~$ json_crt=`vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h"`
+heim@crow2:~$ echo $json_crt|jq -r '.data.certificate'>test.example.com.crt
+heim@crow2:~$ echo $json_crt|jq -r '.data.private_key'>test.example.com.key
+heim@crow2:~$ sudo cp ca_cert.crt /usr/local/share/ca-certificates/
+heim@crow2:~$ sudo update-ca-certificates
+Updating certificates in /etc/ssl/certs...
+1 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
 
+5.Установите корневой сертификат созданного центра сертификации в доверенные в хостовой системе.
+heim@crow2:~$ sudo cp ca_cert.crt /usr/local/share/ca-certificates/
+heim@crow2:~$ sudo update-ca-certificates
+Updating certificates in /etc/ssl/certs...
+1 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
 
----
-root@crow2:~# systemctl restart vault
-root@crow2:~# export VAULT_ADDR=http://127.0.0.1:8210
-root@crow2:~# vault status
-Key                Value
----                -----
-Seal Type          shamir
-Initialized        false
-Sealed             true
-Total Shares       0
-Threshold          0
-Unseal Progress    0/0
-Unseal Nonce       n/a
-Version            1.9.3
-Storage Type       file
-HA Enabled         false
-root@crow2:~# vault operator init
-Unseal Key 1: yAYP/mCwotpHb7KOGXsg2wFgbMwUyOX4L4DzGUr+uv2k
-Unseal Key 2: fPPGdX6xtBvtGNp1rUXpPRoMvLeflZF4okIL6PNDE/Hl
-Unseal Key 3: JoSeThNF0P1uuM3gDb0LwhpBRFA4XjdX+gIAOvrq+x4s
-Unseal Key 4: YgQJzryXo2ae83DB0RL9Ify8TYSlgKEfGVwXJBLab27/
-Unseal Key 5: MztjRRe20W/AFStZ/nZfcTd5pq2BGi7KyxBh2Tcfx90j
-
-Initial Root Token: s.4K4GqYZMAJYEkKGRHX6l6lub
-
-Vault initialized with 5 key shares and a key threshold of 3. Please securely
-distribute the key shares printed above. When the Vault is re-sealed,
-restarted, or stopped, you must supply at least 3 of these keys to unseal it
-before it can start servicing requests.
-
-Vault does not store the generated master key. Without at least 3 keys to
-reconstruct the master key, Vault will remain permanently sealed!
-
-It is possible to generate new unseal keys, provided you have a quorum of
-existing unseal keys shares. See "vault operator rekey" for more information.
-root@crow2:~# vault operator unseal
-Unseal Key (will be hidden):
-Key                Value
----                -----
-Seal Type          shamir
-Initialized        true
-Sealed             true
-Total Shares       5
-Threshold          3
-Unseal Progress    1/3
-Unseal Nonce       3bf2a39d-f1d7-b690-c71e-26ff670ebc0b
-Version            1.9.3
-Storage Type       file
-HA Enabled         false
-root@crow2:~# vault operator unseal
-Unseal Key (will be hidden):
-Key                Value
----                -----
-Seal Type          shamir
-Initialized        true
-Sealed             true
-Total Shares       5
-Threshold          3
-Unseal Progress    2/3
-Unseal Nonce       3bf2a39d-f1d7-b690-c71e-26ff670ebc0b
-Version            1.9.3
-Storage Type       file
-HA Enabled         false
-root@crow2:~# vault operator unseal
-Unseal Key (will be hidden):
-Key             Value
----             -----
-Seal Type       shamir
-Initialized     true
-Sealed          false
-Total Shares    5
-Threshold       3
-Version         1.9.3
-Storage Type    file
-Cluster Name    vault-cluster-fa69170f
-Cluster ID      914c1345-300e-53de-1620-8936674fd4e4
-HA Enabled      false
