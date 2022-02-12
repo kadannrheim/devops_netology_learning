@@ -32,9 +32,9 @@ To                         Action      From
 22/tcp (v6)                ALLOW       Anywhere (v6)
 22 (v6)                    ALLOW       Anywhere (v6)
 443 (v6)                   ALLOW       Anywhere (v6)
-
 ```
 3.Установите hashicorp vault (инструкция по ссылке).
+```
 heim@crow2:~$ curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 OK
 heim@crow2:~$ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
@@ -82,10 +82,9 @@ heim@crow2:~$ systemctl status vault
      Loaded: loaded (/lib/systemd/system/vault.service; disabled; vendor preset: enabled)
      Active: inactive (dead)
        Docs: https://www.vaultproject.io/docs/
-
-...
+```
 4.Cоздайте центр сертификации по инструкции (ссылка) и выпустите сертификат для использования его в настройке веб-сервера nginx (срок жизни сертификата - месяц).
-
+```
 heim@crow2:~$ export VAULT_ADDR=http://127.0.0.1:8200
 heim@crow2:~$ export VAULT_TOKEN=root
 heim@crow2:~$ tee admin-policy.hcl <<EOF
@@ -157,16 +156,18 @@ Updating certificates in /etc/ssl/certs...
 1 added, 0 removed; done.
 Running hooks in /etc/ca-certificates/update.d...
 done.
-
+```
 5.Установите корневой сертификат созданного центра сертификации в доверенные в хостовой системе.
+```
 heim@crow2:~$ sudo cp ca_cert.crt /usr/local/share/ca-certificates/
 heim@crow2:~$ sudo update-ca-certificates
 Updating certificates in /etc/ssl/certs...
 1 added, 0 removed; done.
 Running hooks in /etc/ca-certificates/update.d...
 done.
-
+```
 6.Установите nginx.
+```
 heim@crow2:~$ sudo apt install nginx
 heim@crow2:~$ sudo ufw app list
 Available applications:
@@ -192,9 +193,9 @@ heim@crow2:~$ systemctl status nginx
 фев 12 20:01:05 crow2 systemd[1]: Starting A high performance web server and a reverse proxy server.>
 фев 12 20:01:05 crow2 systemd[1]: Started A high performance web server and a reverse proxy server.
 lines 1-13/13 (END)
-
-  
+```  
 7.По инструкции (ссылка) настройте nginx на https, используя ранее подготовленный сертификат:
+```
 heim@crow2:~$ sudo mkdir /etc/nginx/ssl
 heim@crow2:~$ sudo cp test.example.com.crt /etc/nginx/ssl
 heim@crow2:~$ sudo cp test.example.com.key /etc/nginx/ssl
@@ -215,8 +216,10 @@ Commercial support is available at nginx.com.
 
 Thank you for using nginx.
 ![image](https://user-images.githubusercontent.com/67197701/153726783-5162fbb1-ac6c-412b-9f55-c4938d88170a.png)
+```
 
 9.Создайте скрипт, который будет генерировать новый сертификат в vault:
+```
 heim@crow2:~$ cat cert_update.sh
 #!/bin/bash
 json_cert=`vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="720h"`
@@ -227,8 +230,9 @@ sudo cp test.example.com.key /etc/nginx/ssl
 sudo systemctl restart nginx
 heim@crow2:~$ chmod 755 cert_update.sh
 heim@crow2:~$ ./cert_update.sh
-
+```
 10.Поместите скрипт в crontab, чтобы сертификат обновлялся какого-то числа каждого месяца в удобное для вас время.
+```
 heim@crow2:~$ sudo systemctl enable cron
 Synchronizing state of cron.service with SysV service script with /lib/systemd/systemd-sysv-install.
 Executing: /lib/systemd/systemd-sysv-install enable cron
@@ -236,3 +240,4 @@ heim@crow2:~$ date
 Сб 12 фев 2022 21:41:37 UTC
 heim@crow2:~$ nano crontab -e
 30 21 1 * * /home/heim/cert_update.sh
+```
