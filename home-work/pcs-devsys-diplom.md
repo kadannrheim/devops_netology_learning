@@ -242,3 +242,4 @@ heim@crow2:~$ date
 heim@crow2:~$ nano crontab -e
 30 21 1 * * /home/heim/cert_update.sh
 ```
+![image](https://user-images.githubusercontent.com/67197701/156824498-dbe7f696-d9c4-46de-abfc-cbf15e048366.png)
