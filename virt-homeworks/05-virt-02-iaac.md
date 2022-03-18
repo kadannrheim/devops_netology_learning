@@ -31,9 +31,9 @@
 Установить на личный компьютер:
 
 - VirtualBox
-> ![Версия 6.1.30 r148432 (Qt5.6.2)](https://github.com/kadannrheim/devops-netology/blob/3df3da370200dfca421241474109430cd63a7cda/virt-homeworks/screenshots/05-virt-02-iaac-vb1.png, "Версия 6.1.30 r148432 (Qt5.6.2)")
+![image](https://github.com/kadannrheim/devops-netology/blob/main/virt-homeworks/screenshots/05-virt-02-iaac-vb1.png?raw=true, "Версия 6.1.30 r148432 (Qt5.6.2)")
 - Vagrant
-> ![Vagrant 2.2.19](https://github.com/kadannrheim/devops-netology/blob/3df3da370200dfca421241474109430cd63a7cda/virt-homeworks/screenshots/05-virt-02-iaac-vg1.png, "PS D:\vm\vagrant> vagrant -v
+> ![Vagrant 2.2.19](https://github.com/kadannrheim/devops-netology/blob/main/virt-homeworks/screenshots/05-virt-02-iaac-vg1.png, "PS D:\vm\vagrant> vagrant -v
 Vagrant 2.2.19")
 - Ansible
 ```
