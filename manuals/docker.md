@@ -72,3 +72,6 @@ sammy sudo docker`
 * `docker rm test` удаление контейнера.
 
 * `docker image rm ubuntu:18.04` удаление образа.
+
+# Сборка
+`docker build -t kadannr/nginx1:1 .` где kadannr/nginx1 мною заданное имя, 1 тэг.
