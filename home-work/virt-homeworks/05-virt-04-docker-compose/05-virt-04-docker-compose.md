@@ -339,3 +339,25 @@ internal_ip_address_node01_yandex_cloud = "192.168.101.25"
 Скриншот работающего веб-интерфейса Grafana с текущими метриками, как на примере ниже
 
 ## Решение задачи 3
+```
+heim@crow:/mnt/d/gitvscode/devops-netology/home-work/virt-homeworks/05-virt-04-docker-compose/src/ansible$ (main)cat inventory
+[nodes:children]
+manager
+
+[manager]
+node01.netology.cloud ansible_host=51.250.70.143
+
+heim@crow:/mnt/d/gitvscode/devops-netology/home-work/virt-homeworks/05-virt-04-docker-compose/src/ansible$ (main)ansible --version
+[WARNING]: Ansible is being run in a world writable directory (/mnt/d/gitvscode/devops-netology/home-work/virt-
+homeworks/05-virt-04-docker-compose/src/ansible), ignoring it as an ansible.cfg source. For more information see
+https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
+ansible [core 2.12.2]
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/home/heim/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3/dist-packages/ansible
+  ansible collection location = /home/heim/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/bin/ansible
+  python version = 3.8.10 (default, Nov 26 2021, 20:14:08) [GCC 9.3.0]
+  jinja version = 2.10.1
+  libyaml = True
+  ```
