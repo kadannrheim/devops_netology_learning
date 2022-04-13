@@ -331,6 +331,7 @@ external_ip_address_node01_yandex_cloud = "51.250.70.143"
 internal_ip_address_node01_yandex_cloud = "192.168.101.25"
 ```
 [итоговый скриншот](https://github.com/kadannrheim/devops-netology/blob/7380828f5ab486097978bdd583a494d6a531298c/home-work/virt-homeworks/screenshots/05-virt-04-docker-compose-tarraform1.png)
+[Итоговый скриншот вторая сборка](https://github.com/kadannrheim/devops-netology/blob/97299c9f3d63e4be5b7a7fe1310330e9b26a5b61/home-work/virt-homeworks/screenshots/05-virt-04-docker-compose-tarraform2.png)
 # Задача 3
 Создать ваш первый готовый к боевой эксплуатации компонент мониторинга, состоящий из стека микросервисов.
 
@@ -340,24 +341,57 @@ internal_ip_address_node01_yandex_cloud = "192.168.101.25"
 
 ## Решение задачи 3
 ```
-heim@crow:/mnt/d/gitvscode/devops-netology/home-work/virt-homeworks/05-virt-04-docker-compose/src/ansible$ (main)cat inventory
+kadannr@wcrow:~/git/devops-netology/home-work/virt-homeworks/05-virt-04-docker-compose/src/ansible(main)$ ansible-playbook provision.yml
+
+PLAY [nodes] *****************************************************************************************************************************
+
+TASK [Gathering Facts] *******************************************************************************************************************
+ok: [node01.netology.cloud]
+
+TASK [Create directory for ssh-keys] *****************************************************************************************************
+ok: [node01.netology.cloud]
+
+TASK [Adding rsa-key in /root/.ssh/authorized_keys] **************************************************************************************
+ok: [node01.netology.cloud]
+
+TASK [Checking DNS] **********************************************************************************************************************
+changed: [node01.netology.cloud]
+
+TASK [Installing tools] ******************************************************************************************************************
+changed: [node01.netology.cloud] => (item=git)
+ok: [node01.netology.cloud] => (item=curl)
+
+TASK [Add docker repository] *************************************************************************************************************
+changed: [node01.netology.cloud]
+
+TASK [Installing docker package] *********************************************************************************************************
+changed: [node01.netology.cloud] => (item=docker-ce)
+ok: [node01.netology.cloud] => (item=docker-ce-cli)
+ok: [node01.netology.cloud] => (item=containerd.io)
+
+TASK [Enable docker daemon] **************************************************************************************************************
+changed: [node01.netology.cloud]
+
+TASK [Install docker-compose] ************************************************************************************************************
+changed: [node01.netology.cloud]
+
+TASK [Synchronization] *******************************************************************************************************************
+changed: [node01.netology.cloud]
+
+TASK [Pull all images in compose] ********************************************************************************************************
+changed: [node01.netology.cloud]
+
+TASK [Up all services in compose] ********************************************************************************************************
+changed: [node01.netology.cloud]
+
+PLAY RECAP *******************************************************************************************************************************
+node01.netology.cloud      : ok=12   changed=9    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+kadannr@wcrow:~/git/devops-netology/home-work/virt-homeworks/05-virt-04-docker-compose/src/ansible(main)$ cat inventory
 [nodes:children]
 manager
 
 [manager]
-node01.netology.cloud ansible_host=51.250.70.143
-
-heim@crow:/mnt/d/gitvscode/devops-netology/home-work/virt-homeworks/05-virt-04-docker-compose/src/ansible$ (main)ansible --version
-[WARNING]: Ansible is being run in a world writable directory (/mnt/d/gitvscode/devops-netology/home-work/virt-
-homeworks/05-virt-04-docker-compose/src/ansible), ignoring it as an ansible.cfg source. For more information see
-https://docs.ansible.com/ansible/devel/reference_appendices/config.html#cfg-in-world-writable-dir
-ansible [core 2.12.2]
-  config file = /etc/ansible/ansible.cfg
-  configured module search path = ['/home/heim/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-  ansible python module location = /usr/lib/python3/dist-packages/ansible
-  ansible collection location = /home/heim/.ansible/collections:/usr/share/ansible/collections
-  executable location = /usr/bin/ansible
-  python version = 3.8.10 (default, Nov 26 2021, 20:14:08) [GCC 9.3.0]
-  jinja version = 2.10.1
-  libyaml = True
-  ```
+node01.netology.cloud ansible_host=51.250.84.52
+```
+[итоговый скриншот](https://github.com/kadannrheim/devops-netology/blob/97299c9f3d63e4be5b7a7fe1310330e9b26a5b61/home-work/virt-homeworks/screenshots/05-virt-04-docker-compose-ansible1.png)
