@@ -330,7 +330,8 @@ Outputs:
 external_ip_address_node01_yandex_cloud = "51.250.70.143"
 internal_ip_address_node01_yandex_cloud = "192.168.101.25"
 ```
-[итоговый скриншот](https://github.com/kadannrheim/devops-netology/blob/7380828f5ab486097978bdd583a494d6a531298c/home-work/virt-homeworks/screenshots/05-virt-04-docker-compose-tarraform1.png)
+[Итоговый скриншот](https://github.com/kadannrheim/devops-netology/blob/7380828f5ab486097978bdd583a494d6a531298c/home-work/virt-homeworks/screenshots/05-virt-04-docker-compose-tarraform1.png)
+
 [Итоговый скриншот вторая сборка](https://github.com/kadannrheim/devops-netology/blob/97299c9f3d63e4be5b7a7fe1310330e9b26a5b61/home-work/virt-homeworks/screenshots/05-virt-04-docker-compose-tarraform2.png)
 # Задача 3
 Создать ваш первый готовый к боевой эксплуатации компонент мониторинга, состоящий из стека микросервисов.
@@ -394,4 +395,4 @@ manager
 [manager]
 node01.netology.cloud ansible_host=51.250.84.52
 ```
-[итоговый скриншот](https://github.com/kadannrheim/devops-netology/blob/97299c9f3d63e4be5b7a7fe1310330e9b26a5b61/home-work/virt-homeworks/screenshots/05-virt-04-docker-compose-ansible1.png)
+[Итоговый скриншот](https://github.com/kadannrheim/devops-netology/blob/97299c9f3d63e4be5b7a7fe1310330e9b26a5b61/home-work/virt-homeworks/screenshots/05-virt-04-docker-compose-ansible1.png)
