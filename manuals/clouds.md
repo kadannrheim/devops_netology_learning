@@ -29,3 +29,6 @@ yc vpc subnet create \
 
 ### 
 yc config set token [токен CLI яндекса]
+yc config profile create sa-profile
+yc config set service-account-key key.json
+yc config list

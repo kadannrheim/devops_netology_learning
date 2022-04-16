@@ -46,3 +46,6 @@ https://www.packer.io/downloads
 * sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 * sudo apt-get update && sudo apt-get install terraform
 * terraform --version
+* terraform init
+* terraform plan
+* terraform apply
