@@ -32,7 +32,7 @@
 ```
 docker node ls
 ```
-
+https://github.com/kadannrheim/devops-netology/blob/c2d615753734989ed8315a29057f524bbe5008fe/home-work/virt-homeworks/screenshots/05-virt-05-docker-swarm2.png
 ## Задача 3
 
 Создать ваш первый, готовый к боевой эксплуатации кластер мониторинга, состоящий из стека микросервисов.
@@ -41,7 +41,7 @@ docker node ls
 ```
 docker service ls
 ```
-
+https://github.com/kadannrheim/devops-netology/blob/c2d615753734989ed8315a29057f524bbe5008fe/home-work/virt-homeworks/screenshots/05-virt-05-docker-swarm3.png
 ## Задача 4 (*)
 
 Выполнить на лидере Docker Swarm кластера команду (указанную ниже) и дать письменное описание её функционала, что она делает и зачем она нужна:
@@ -49,4 +49,5 @@ docker service ls
 # см.документацию: https://docs.docker.com/engine/swarm/swarm_manager_locking/
 docker swarm update --autolock=true
 ```
-
+Данная команда включает блокировку Swarm менеджера против неразрешенного доступа к Raft логу. На каждую ноду menedger загружаются ключи дешифрования и шефрования, что позволяет шифровать сообщения.
+https://github.com/kadannrheim/devops-netology/blob/c2d615753734989ed8315a29057f524bbe5008fe/home-work/virt-homeworks/screenshots/05-virt-05-docker-swarm4.png
