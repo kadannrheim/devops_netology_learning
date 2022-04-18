@@ -33,7 +33,7 @@
 docker node ls
 ```
 <p align="center">
-  <img width="800" height="400" src="../screenshots/05-virt-05-docker-swarm2.png">
+  <img width="800" height="300" src="../screenshots/05-virt-05-docker-swarm2.png">
 </p>
 
 ## Задача 3
@@ -45,7 +45,7 @@ docker node ls
 docker service ls
 ```
 <p align="center">
-  <img width="800" height="400" src="../screenshots/05-virt-05-docker-swarm3.png">
+  <img width="800" height="300" src="../screenshots/05-virt-05-docker-swarm3.png">
 </p>
 ## Задача 4 (*)
 
@@ -56,5 +56,5 @@ docker swarm update --autolock=true
 ```
 Данная команда включает блокировку Swarm менеджера против неразрешенного доступа к Raft логу. На каждую ноду menedger загружаются ключи дешифрования и шефрования, что позволяет шифровать сообщения.
 <p align="center">
-  <img width="800" height="400" src="../screenshots/05-virt-05-docker-swarm4.png">
+  <img width="800" height="300" src="../screenshots/05-virt-05-docker-swarm4.png">
 </p>
