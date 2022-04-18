@@ -29,6 +29,10 @@ yc vpc subnet create \
 
 ### 
 yc config set token [токен CLI яндекса]
-yc config profile create sa-profile
-yc config set service-account-key key.json
-yc config list
+yc iam service-account create --name my-robot
+`yc iam service-account list` -Получите список сервисных аккаунтов, которые существуют в вашем облаке:
+`yc iam key create --service-account-name my-robot --output key.json` -Создайте авторизованный ключ для сервисного аккаунта и сохраните его в файл key.json
+`yc config profile create sa-profile` -Создайте новый профиль CLI
+`yc config set service-account-key key.json` -Добавьте авторизованный ключ
+`yc config list` -Проверьте, что параметры для сервисного аккаунта добавлены верно. Вывод будет уже с ключами шифрования. 
+`yc vpc subnet delete --name my-subnet-a && yc vpc network delete --name net` -после packer удаляем сеть и подсеть

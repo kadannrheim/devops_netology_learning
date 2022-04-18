@@ -75,3 +75,10 @@ sammy sudo docker`
 
 # Сборка
 `docker build -t kadannr/nginx1:1 .` где kadannr/nginx1 мною заданное имя, 1 тэг.
+
+
+# ctop
+docker run --rm -ti \
+  --name=ctop \
+  --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+  quay.io/vektorlab/ctop:latest

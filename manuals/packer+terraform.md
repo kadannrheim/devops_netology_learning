@@ -35,8 +35,11 @@ https://www.packer.io/downloads
     }
   ]
 }
-
-    * packer build [имя файла] -запускаем сборку образа
+Здесь не забываем создать сервисный аккаунт на облаке, пользователя для CLI, ключи шифрования, после:
+* `packer validate centos-7-base.json`
+* `packer build centos-7-base.json` -запускаем сборку образа
+* `yc compute image list` -просмотр доступных образов
+* `yc vpc subnet delete --name my-subnet-a && yc vpc network delete --name net` -удаляем сеть и подсеть
 # Установка TERRAFORM
 * [Мануал](https://learn.hashicorp.com/tutorials/terraform/install-cli)
   
@@ -47,5 +50,8 @@ https://www.packer.io/downloads
 * sudo apt-get update && sudo apt-get install terraform
 * terraform --version
 * terraform init
+* terraform validate
 * terraform plan
-* terraform apply
+  * terraform init && terraform validate && terraform plan
+* `terraform apply -auto-approve`
+* `terraform destroy -auto-approve` -удалить всё созданное
