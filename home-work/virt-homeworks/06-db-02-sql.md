@@ -79,7 +79,7 @@ test_db=#
 - SQL-запрос для выдачи списка пользователей с правами над таблицами test_db
 - список пользователей с правами над таблицами test_db
 ### Решение задачи 2
-
+```
 kadannr @ wcrow ~/docker/postgres12
 └─ $ ▶ sudo docker exec -it psql bash
 root@999cd1d93f42:/# export PGPASSWORD=test && psql -h localhost -U test-admin-user test_db
@@ -180,6 +180,7 @@ Access method: heap
 
 test_db=#
 
+```
 ```
 test_db=# SELECT
     grantee, table_name, privilege_type
