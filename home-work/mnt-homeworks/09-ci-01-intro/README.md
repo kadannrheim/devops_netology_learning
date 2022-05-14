@@ -15,7 +15,7 @@
 6. On test <-> On fix, Done
 7. Done <-> Closed, Open
 <p align="center">
-  <img src="../screenshots/09-ci-02-cicd-sonarqube.png">
+  <img src="../screenshots/09-ci-01-intro-bug.png">
 </p>
 Остальные задачи должны проходить по упрощённому workflow:
 1. Open -> On develop
@@ -30,9 +30,8 @@
 Перейти в scrum, запланировать новый спринт, состоящий из задач эпика и одного бага, стартовать спринт, провести задачи до состояния Closed. Закрыть спринт.
 
 Если всё отработало в рамках ожидания - выгрузить схемы workflow для импорта в XML. Файлы с workflow приложить к решению задания.
-<p align="center">
-  <img src="../screenshots/09-ci-01-classic workflow.xml">
-</p>
+[export](../screenshots/09-ci-01-classic workflow.xml)
+
 ---
 
 ### Как оформить ДЗ?
