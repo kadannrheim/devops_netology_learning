@@ -31,7 +31,7 @@
 
 Если всё отработало в рамках ожидания - выгрузить схемы workflow для импорта в XML. Файлы с workflow приложить к решению задания.
 
-[export](../screenshots/09-ci-01-classic workflow.xml)
+[export](https://github.com/kadannrheim/devops-netology/blob/a698769bd5ed4fd219cba07936ca4dc663a58f5c/home-work/mnt-homeworks/screenshots/09-ci-01-classic%20workflow.xml)
 
 ---
 
