@@ -82,3 +82,29 @@ docker run --rm -ti \
   --name=ctop \
   --volume /var/run/docker.sock:/var/run/docker.sock:ro \
   quay.io/vektorlab/ctop:latest
+
+# Docker Compose на примере Jenkins
+
+`docker pull jenkins/jenkins` -установка jenkins
+
+    Файл docker-compose.yaml:
+    ```
+    version: '3.8'
+    services:
+    jenkins:
+        image: jenkins/jenkins:latest-jdk11
+        privileged: true
+        user: root
+        ports:
+        - 8080:8080
+        - 50000:50000
+        container_name: jenkins
+        volumes:
+        - $HOME/jenkins_compose/jenkins_configuration:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+    ```
+`docker-compose up -d` -запуск сборки
+`docker-compose ps` -просмотр защеных контейнеров
+`docker-compose up` -Эта команда используется, когда вы хотите запустить или вызвать все службы в вашем файле docker-compose.yml. Файл Docker-compose.yml определяет ваши сервисы, их свойства, переменные и зависимости.
+`docker-compose ps` -просмотра запущенных контейнеров
+`docker-compose jenkins` -можете указать docker-compose запустить только один сервис, например nexus
