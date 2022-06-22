@@ -108,3 +108,5 @@ docker run --rm -ti \
 `docker-compose up` -Эта команда используется, когда вы хотите запустить или вызвать все службы в вашем файле docker-compose.yml. Файл Docker-compose.yml определяет ваши сервисы, их свойства, переменные и зависимости.
 `docker-compose ps` -просмотра запущенных контейнеров
 `docker-compose jenkins` -можете указать docker-compose запустить только один сервис, например nexus
+`docker volume ls` -просмотр томов
+`docker volume rm` -удаление томов
