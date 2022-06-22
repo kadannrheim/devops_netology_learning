@@ -15,7 +15,8 @@
 - вывода описания содержимого таблиц
 - выхода из psql
 
-## Решение:
+## Решение задачи 1:
+```
 kadannr @ wcrow ~/docker/postgres14
 └─ $ ▶ docker exec -it psql14 bash
 root@d02dd17d1577:/# psql -h localhost -p 5432 -U postgres -W
@@ -29,7 +30,9 @@ General
   \crosstabview [COLUMNS] execute query and display results in crosstab
   \errverbose            show most recent error message at maximum verbosity
 ...
+```
 ### вывода списка БД
+```
 postgres=# \l
                                    List of databases
       Name      |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges
@@ -42,11 +45,15 @@ postgres=# \l
  template1      | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
                 |          |          |            |            | postgres=CTc/postgres
 (5 rows)
+```
 ### подключения к БД
+```
 Connection
   \c[onnect] {[DBNAME|- USER|- HOST|- PORT|-] | conninfo}
                          connect to new database (currently "postgres")
+```
 ### вывода списка таблиц
+```
 \d[S+] list tables, views, and sequences
 postgres=# \dtS
                     List of relations
@@ -58,7 +65,9 @@ postgres=# \dtS
  pg_catalog | pg_amproc               | table | postgres
 ...
 (62 rows)
+```
 ### вывода описания содержимого таблиц
+```
  \d[S+]  NAME  describe table, view, sequence, or index
 postgres-# \dS+ pg_index
                                              Table "pg_catalog.pg_index"
@@ -84,6 +93,7 @@ Access method: heap
 ### выхода из psql
 postgres-# \q
 root@d02dd17d1577:/#
+```
 ## Задача 2
 
 Используя `psql` создайте БД `test_database`.
@@ -101,18 +111,25 @@ root@d02dd17d1577:/#
 
 **Приведите в ответе** команду, которую вы использовали для вычисления и полученный результат.
 ## Решение
+```
 root@d02dd17d1577:/# psql -h localhost -p 5432 -U postgres -W
 Password:
 psql (14.3 (Debian 14.3-1.pgdg110+1))
 Type "help" for help.
+```
 ### Создаю БД test_database
+```
 postgres=# CREATE DATABASE test_database;
 CREATE DATABASE
+```
 ### Копирую файл
+```
 sudo cp test_dump.sql /var/lib/docker/volumes/postgres14_data/_data
 root@d02dd17d1577:/var/lib/postgresql/data14# ls
 test_dump.sql
+```
 ### Восстанавливаю backup
+```
 root@d02dd17d1577:/var/lib/postgresql/data14# psql -U postgres -f ./test_dump.sql test_database
 SET
 SET
@@ -143,6 +160,7 @@ COPY 8
 (1 row)
 
 ALTER TABLE
+```
 ### Захожу в posgres и подключаюсь к test_databse
 ```
 root@d02dd17d1577:/var/lib/postgresql/data14# psql -h localhost -p 5432 -U postgres -W
@@ -188,6 +206,7 @@ test_database=# SELECT avg_width FROM pg_stats WHERE tablename='orders';
 
 Можно ли было изначально исключить "ручное" разбиение при проектировании таблицы orders?
 ## Решение задачи 3
+```
 test_database=# alter table orders rename to orders_simple;
 ALTER TABLE
 test_database=# create table orders (id integer, title varchar(80), price integer) partition by range(price);
@@ -208,6 +227,7 @@ test_database-# \dt
  public | orders_2      | table             | postgres
  public | orders_simple | table             | postgres
 (4 rows)
+```
 ### Можно ли было изначально исключить "ручное" разбиение при проектировании таблицы orders?
 Можно, если изначально была бы секционированной
 ```
@@ -245,6 +265,7 @@ Access method: heap
 
 ---
 ## Решение задачи 4
+```
 root@d02dd17d1577:/var/lib/postgresql/data# pg_dump -U postgres -d test_database > test_database_dump.sql
 root@d02dd17d1577:/var/lib/postgresql/data# ls
 base          pg_ident.conf  pg_serial     pg_tblspc    postgresql.auto.conf
@@ -252,9 +273,12 @@ global        pg_logical     pg_snapshots  pg_twophase  postgresql.conf
 pg_commit_ts  pg_multixact   pg_stat       PG_VERSION   postmaster.opts
 pg_dynshmem   pg_notify      pg_stat_tmp   pg_wal       postmaster.pid
 pg_hba.conf   pg_replslot    pg_subtrans   pg_xact      test_database_dump.sql
+```
 ### Для уникальности добавляем индекс
+```
 test_database=# CREATE UNIQUE INDEX title_idx ON orders_1 (title);
 CREATE INDEX
+```
 ### Как cдавать задание
 
 Выполненное домашнее задание пришлите ссылкой на .md-файл в вашем репозитории.
