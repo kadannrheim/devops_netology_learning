@@ -91,7 +91,7 @@ Your version of Terraform is out of date! The latest version
 is 1.2.6. You can update by downloading from https://www.terraform.io/downloads.html
 ```
 <p align="center">
-  <img src="./screenshots/7.1_inf_live_code.png">
+  <img src="../screenshots/7.1_inf_live_code.png">
 </p>
 
 ---
