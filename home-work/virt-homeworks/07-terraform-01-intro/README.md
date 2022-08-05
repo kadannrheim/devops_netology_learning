@@ -74,7 +74,9 @@ on linux_amd64
 Your version of Terraform is out of date! The latest version
 is 1.2.6. You can update by downloading from https://www.terraform.io/downloads.html
 ```
-
+<p align="center">
+  <img src="./screenshots/7.1_inf_live_code.png">
+</p>
 ## Задача 3. Поддержка легаси кода. 
 
 В какой-то момент вы обновили терраформ до новой версии, например с 0.12 до 0.13. 
