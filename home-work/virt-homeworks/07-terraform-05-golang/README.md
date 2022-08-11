@@ -55,7 +55,8 @@ go version go1.13.8 linux/amd64
 
 ## Решение
 
-1. ```
+1. 
+```
    kadannr @ wcrow ~
 └─ $ ▶ mkdir gowork
 kadannr @ wcrow ~
@@ -82,7 +83,8 @@ func main() {
     fmt.Println(output)
 }
 ```
-2. ```
+2.
+```
 kadannr @ wcrow ~/gowork
 └─ $ ▶ vi base_go2.go
 kadannr @ wcrow ~/gowork
@@ -107,7 +109,8 @@ func main() {
         fmt.Printf("The smallest number in the list: %v\n", y)
 }
 ```
-3. ```
+3. 
+```
 kadannr @ wcrow ~/gowork
 └─ $ ▶ vi base_go3.go
 kadannr @ wcrow ~/gowork
