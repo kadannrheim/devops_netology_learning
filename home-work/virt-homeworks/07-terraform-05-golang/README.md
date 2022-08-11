@@ -64,8 +64,8 @@ kadannr @ wcrow ~/gowork
 └─ $ ▶ vi base_go1.go
 kadannr @ wcrow ~/gowork
 └─ $ ▶ go run base_go1.go
-Enter a number: 10
-32.8
+Enter a number: 4
+1.2192
 kadannr @ wcrow ~/gowork
 └─ $ ▶ cat base_go1.go
 package main
@@ -77,7 +77,7 @@ func main() {
     var input float64
     fmt.Scanf("%f", &input)
 
-    output := input * 3.28
+    output := input * 0.3048
 
     fmt.Println(output)
 }
