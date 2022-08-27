@@ -8,9 +8,9 @@
 
 ## Основная часть
 1. Приготовьте свой собственный inventory файл `prod.yml`.
-   Файл: [prod.yml](./playbook/inventory/prod.yml)
+Файл: [prod.yml](./playbook/inventory/prod.yml)
 2. Допишите playbook: нужно сделать ещё один play, который устанавливает и настраивает kibana.
-   Файл: [site.yml](./playbook/site.yml)
+Файл: [site.yml](./playbook/site.yml)
 3. При создании tasks рекомендую использовать модули: `get_url`, `template`, `unarchive`, `file`.
 4. Tasks должны: скачать нужной версии дистрибутив, выполнить распаковку в выбранную директорию, сгенерировать конфигурацию с параметрами.
 5. Запустите `ansible-lint site.yml` и исправьте ошибки, если они есть.
