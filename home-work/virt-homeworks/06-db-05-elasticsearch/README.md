@@ -72,8 +72,7 @@ docker login -u "kadannr"  --password-stdin "yIpa$n7A04S2Bt%Iek" docker.io
 docker push devops-elasticsearch:7.1.1
 ```
 ```
-kadannr @ wcrow ~
-└─ $ ▶ docker login -u "kadannr" docker.io
+$ docker login -u "kadannr" docker.io
 Password:
 WARNING! Your password will be stored unencrypted in /home/kadannr/.docker/config.json.
 Configure a credential helper to remove this warning. See
@@ -82,13 +81,11 @@ https://docs.docker.com/engine/reference/commandline/login/#credentials-store
 Login Succeeded
 ```
 ```
-kadannr @ wcrow ~
-└─ $ ▶ docker images
+$ docker images
 REPOSITORY                     TAG             IMAGE ID       CREATED         SIZE
 kadannr/devops-elasticsearch   7.1.1           1c4b59f28fd7   36 hours ago    229MB
 ...
-kadannr @ wcrow ~
-└─ $ ▶ docker push kadannr/devops-elasticsearch:7.1.1
+$ docker push kadannr/devops-elasticsearch:7.1.1
 The push refers to repository [docker.io/kadannr/devops-elasticsearch]
 c89fa5712626: Pushed
 174f56854903: Pushed
@@ -98,8 +95,7 @@ c89fa5712626: Pushed
 devops-elasticsearch](https://hub.docker.com/layers/265394865/kadannr/devops-elasticsearch/7.1.1/images/sha256-3930fdc3b88ebc19de7eeec5c6a66b231a2702add70b7c40e1e1e239f84d1f4f?context=repo) </code>
 
 ```
-kadannr @ wcrow ~
-└─ $ ▶ docker run --rm -d --name els -p 9200:9200 -p 9300:9300 kadannr/devops-elasticsearch:7.1.1
+$ docker run --rm -d --name els -p 9200:9200 -p 9300:9300 kadannr/devops-elasticsearch:7.1.1
 9e999ff980943aaae5f7116e2a880b76638447483772d675ece01a1243627b8a
 ```
 ## Задача 2
