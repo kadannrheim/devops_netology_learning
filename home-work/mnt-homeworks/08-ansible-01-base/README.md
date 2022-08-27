@@ -177,7 +177,7 @@ kadannr @ wcrow ~/git/devops-netology/home-work/mnt-homeworks/08-ansible-01-base
 ```
 11. Запустите playbook на окружении `prod.yml`. При запуске `ansible` должен запросить у вас пароль. Убедитесь что факты `some_fact` для каждого из хостов определены из верных `group_vars`.
 ```
-1kadannr @ wcrow ~/git/devops-netology/home-work/mnt-homeworks/08-ansible-01-base/playbook (main)
+kadannr @ wcrow ~/git/devops-netology/home-work/mnt-homeworks/08-ansible-01-base/playbook (main)
 └─ $ ▶ ansible-playbook -i inventory/prod.yml site.yml --ask-vault-pass
 Vault password: 
 
