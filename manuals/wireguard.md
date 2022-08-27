@@ -36,3 +36,8 @@ sudo ufw status
 `sudo wg show`
 # Отключить соединение
 `sudo wg-quick down wg0`
+
+
+# Автоматический с web интерфейсом по скрипту
+bash <(curl -Ls https://github.com/firezone/firezone/raw/master/scripts/install.sh)
+
