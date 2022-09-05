@@ -367,7 +367,7 @@ kadannr @ wcrow ~/git/devops-netology/home-work/mnt-homeworks/08-ansible-04-modu
         msg: "{{ test_out }}"  
 ```
 17.  В ответ необходимо прислать ссылку на репозиторий с collection
-<a href="[http://site.ru](https://github.com/kadannrheim/devops-netology/tree/main/home-work/mnt-homeworks/08-ansible-04-module/my_netology/my_collection)">collection</a>
+[collection](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html#creating-a-module](https://github.com/kadannrheim/devops-netology/tree/main/home-work/mnt-homeworks/08-ansible-04-module/my_netology/my_collection)
 
 
 ## Необязательная часть
