@@ -367,7 +367,9 @@ kadannr @ wcrow ~/git/devops-netology/home-work/mnt-homeworks/08-ansible-04-modu
         msg: "{{ test_out }}"  
 ```
 17.  В ответ необходимо прислать ссылку на репозиторий с collection
-[collection]([http://example.com/ "Необязательная подсказка"](https://github.com/kadannrheim/devops-netology/tree/main/home-work/mnt-homeworks/08-ansible-04-module/my_netology/my_collection))
+<a href="[http://site.ru](https://github.com/kadannrheim/devops-netology/tree/main/home-work/mnt-homeworks/08-ansible-04-module/my_netology/my_collection)">collection</a>
+
+
 ## Необязательная часть
 
 1. Используйте свой полёт фантазии: Создайте свой собственный module для тех roles, что мы делали в рамках предыдущих лекций.
