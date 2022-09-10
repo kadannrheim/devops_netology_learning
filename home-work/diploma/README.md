@@ -11,6 +11,7 @@
 
 
 ---
+---
 ## Цели:
 
 1. Зарегистрировать доменное имя (любое на ваш выбор в любой доменной зоне).
@@ -23,25 +24,31 @@
 8. Настроить мониторинг инфраструктуры с помощью стека: Prometheus, Alert Manager и Grafana.
 
 ---
+---
 ## Этапы выполнения:
 
-### 1. Регистрация доменного имени
+### 1. Регистрация доменного имени и пропись dns yandex
 sc1
 
+---
 ### 2. Создание инфраструктуры
-#### 2.1 Подготовка yc
-```
-https://cloud.yandex.ru/docs/cli/quickstart
-или 
-* Скрипт установит CLI и добавит путь до исполняемого файла в переменную окружения PATH:
+### 2.1 Подготовка yc
+### 2.1.1 Получите OAuth-токен в сервисе Яндекс.OAuth https://cloud.yandex.ru/docs/cli/quickstart
+### 2.1.2 Скрипт установит CLI yc https://cloud.yandex.ru/docs/cli/quickstart
 ```
 curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
 ```
-* yc --version - проверка версии, нужно пеерлогиниться после установки.
+### 2.1.2 После установки нужно перелогиниться
+```
+logout
+```
+### 2.1.3 Проверка версии yc
 ```
 kadannr @ wcrow ~
 └─ $ ▶ yc --version
 Yandex Cloud CLI 0.89.0 linux/amd64
+```
+### 2.1.4 Инициализация yc
 ```
 kadannr @ wcrow ~
 └─ $ ▶ (main)yc init
@@ -71,8 +78,52 @@ Which zone do you want to use as a profile default?
 Please enter your numeric choice: 1
 Your profile default Compute zone has been set to 'ru-central1-a'.
 ```
-#### 2.3 Создвние сети и подсети для packer
+### 2.1.5 Создание сервисного аккаунта "my-robot" https://cloud.yandex.ru/docs/iam/quickstart-sa
 ```
+kadannr @ wcrow ~
+└─ $ ▶ yc iam service-account create --name my-robot \
+>   --description "this is my service account"
+id: ajet68j1sgtpbn9e5gnm
+folder_id: b1germtpul6t5a784q42
+created_at: "2022-09-07T19:36:52.694803192Z"
+name: my-robot
+description: this is my service account
+
+kadannr @ wcrow ~/git/devops-netology/home-work/diploma/packer (main)
+└─ $ ▶ yc iam service-account list
++----------------------+----------+
+|          ID          |   NAME   |
++----------------------+----------+
+| ajet68j1sgtpbn9e5gnm | my-robot |
++----------------------+----------+
+```
+### 2.1.6  Создание ключа "key.json" для сервисного аккаунта "my-robot"
+```
+kadannr @ wcrow ~
+└─ $ ▶ yc iam key create --service-account-name my-robot --output key.json
+id: ajefn7nkkp3o487ol7bv
+service_account_id: ajet68j1sgtpbn9e5gnm
+created_at: "2022-09-07T19:38:12.575404302Z"
+key_algorithm: RSA_2048
+```
+### 2.1.7 Указываю в конфигурации профиля авторизованный ключ сервисного аккаунта
+```
+yc config set service-account-key key.json
+```
+#### 2.1.8 Вывод конфигурационной информации yc
+```
+kadannr @ wcrow ~
+└─ $ ▶ yc config list
+service-account-key:
+  id: ajekf68rjm2msv30d112
+  service_account_id: ajel2fuobpf4jf8l98jl
+  created_at: "2022-09-17T15:53:47.747252807Z"
+  key_algorithm: RSA_2048
+cloud-id: b1gsgr4keg8cp3dtm059
+folder-id: b1germtpul6t5a784q42
+compute-default-zone: ru-central1-a
+```
+### 2.1.9 Создание сети для packer
 kadannr @ wcrow ~
 └─ $ ▶ yc vpc network create \
 > --name net \
@@ -85,7 +136,8 @@ name: net
 description: my network via yc
 labels:
   my-label: netology
-
+#### 2.1.10 Создание подсети для packer
+```
 kadannr @ wcrow ~
 └─ $ ▶ yc vpc subnet create \
 > --name my-subnet-a \
@@ -102,19 +154,17 @@ network_id: enphcsq7cdh7su20a0gu
 zone_id: ru-central1-a
 v4_cidr_blocks:
 - 10.1.2.0/24
-
-kadannr @ wcrow ~
-└─ $ ▶ yc config list
-service-account-key:
-  id: ajekf68rjm2msv30d112
-  service_account_id: ajel2fuobpf4jf8l98jl
-  created_at: "2022-04-17T15:53:47.747252807Z"
-  key_algorithm: RSA_2048
-cloud-id: b1gsgr4keg8cp3dtm059
-folder-id: b1germtpul6t5a784q42
-compute-default-zone: ru-central1-a
 ```
-#### 2.4 Редактирование файла centos-7-base.json
+
+### 2.1.11 Команды вывода информации
+`yc vpc network --help` -Посмотрить описание команд CLI для работы с облачными сетями
+`yc vpc network list` -Получить список всех облачных сетей в каталоге, указанном в вашем профиле CLI
+`yc vpc network list --format yaml` -Получить тот же список c большим количеством деталей в формате YAML
+`yc config list`-Проверить настройки вашего профиля CLI
+
+### 2.2 Создание образа с помощью packer
+### 2.2.1 Редактирование файла centos-7-base.json ""folder_id"" и ""subnet_id""
+```
 {
   "builders": [
     {
@@ -126,7 +176,7 @@ compute-default-zone: ru-central1-a
       "source_image_family": "centos-7",
       "ssh_username": "centos",
       "subnet_id": "e9b9ouoqgqn7vi9amqjq",
-      "token": "",
+      "token": "THISISMYTOKEN",
       "type": "yandex",
       "use_ipv4_nat": true,
       "zone": "ru-central1-a"
@@ -142,11 +192,32 @@ compute-default-zone: ru-central1-a
     }
   ]
 }
-#### 2.2 Подготовка образа packer на yc
-
-
-
-
+```
+#### 2.2.2 Подготовка образа packer на yc
+kadannr @ wcrow ~/git/devops-netology/home-work/diploma/packer (main)
+└─ $ ▶ packer validate centos-7-base.json
+kadannr @ wcrow ~/git/devops-netology/home-work/diploma/packer (main)
+└─ $ ▶ packer build centos-7-base.json
+pic2
+#### 2.2.3 Проверить наличие созданного образа
+kadannr @ wcrow ~/git/devops-netology/home-work/diploma/packer (main)
+└─ $ ▶ yc compute image list
++----------------------+---------------+--------+----------------------+--------+
+|          ID          |     NAME      | FAMILY |     PRODUCT IDS      | STATUS |
++----------------------+---------------+--------+----------------------+--------+
+| fd8alk4v1vqelrt1aub5 | centos-7-base | centos | f2euv1kekdgvc0jrpaet | READY  |
++----------------------+---------------+--------+----------------------+--------+
+#### 2.2.4 Удаляем более не нужную сеть и подсеть
+```
+yc vpc subnet delete --name my-subnet-a && yc vpc network delete --name net
+```
+#### 2
+#### 2
+#### 2
+#### 2
+#### 2
+#### 2
+#### 2
 ### 3. Установка Nginx и LetsEncrypt
 
 
