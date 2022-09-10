@@ -30,7 +30,7 @@ yc vpc subnet create \
 ### 
 yc config set token [токен CLI яндекса]
 yc iam service-account create --name my-robot
-`yc iam service-account list` -Получите список сервисных аккаунтов, которые существуют в вашем облаке:
+`yc iam service-account list` -Получите список сервисных аккаунтов, которые существуют в вашем облаке
 `yc iam key create --service-account-name my-robot --output key.json` -Создайте авторизованный ключ для сервисного аккаунта и сохраните его в файл key.json
 `yc config profile create sa-profile` -Создайте новый профиль CLI
 `yc config set service-account-key key.json` -Добавьте авторизованный ключ
