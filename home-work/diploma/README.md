@@ -211,8 +211,12 @@ kadannr @ wcrow ~/git/devops-netology/home-work/diploma/packer (main)
 ```
 yc vpc subnet delete --name my-subnet-a && yc vpc network delete --name net
 ```
-#### 2
-#### 2
+#### 2 terraform создание Yandex Object Storage в Object Storage "/Бакеты/Новый бакет"
+
+#### 2 Сохраняем стостояние terraform в object Storage https://cloud.yandex.ru/docs/tutorials/infrastructure-management/terraform-state-storage
+
+
+
 #### 2
 #### 2
 #### 2
