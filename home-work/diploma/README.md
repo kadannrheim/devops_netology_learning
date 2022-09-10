@@ -8,8 +8,7 @@
           * [Установка WordPress](#установка-wordpress)
           * [Установка Gitlab CE, Gitlab Runner и настройка CI/CD](#установка-gitlab)
           * [Установка Prometheus, Alert Manager, Node Exporter и Grafana](#установка-prometheus)
-  * [Что необходимо для сдачи задания?](#что-необходимо-для-сдачи-задания)
-  * [Как правильно задавать вопросы дипломному руководителю?](#как-правильно-задавать-вопросы-дипломному-руководителю)
+
 
 ---
 ## Цели:
@@ -26,208 +25,145 @@
 ---
 ## Этапы выполнения:
 
-### Регистрация доменного имени
+### 1. Регистрация доменного имени
+sc1
 
-Подойдет любое доменное имя на ваш выбор в любой доменной зоне.
+### 2. Создание инфраструктуры
+#### 2.1 Подготовка yc
+```
+https://cloud.yandex.ru/docs/cli/quickstart
+или 
+* Скрипт установит CLI и добавит путь до исполняемого файла в переменную окружения PATH:
+```
+curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+```
+* yc --version - проверка версии, нужно пеерлогиниться после установки.
+```
+kadannr @ wcrow ~
+└─ $ ▶ yc --version
+Yandex Cloud CLI 0.89.0 linux/amd64
+```
+kadannr @ wcrow ~
+└─ $ ▶ (main)yc init
+Welcome! This command will take you through the configuration process.
+Pick desired action:
+ [1] Re-initialize this profile 'netology' with new settings
+ [2] Create a new profile
+ [3] Switch to and re-initialize existing profile: 'default'
+Please enter your numeric choice: 1
+Please go to https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb in order to obtain OAuth token.
 
-ПРИМЕЧАНИЕ: Далее в качестве примера используется домен `you.domain` замените его вашим доменом.
+Please enter OAuth token: [AQAAAAAhN*********************BFmg_1gzs] AQAA##############dNufpU9enUBFmg_1gzs
+You have one cloud available: 'cloud-alifanovea' (id = b1gsgr4keg8cp3dtm059). It is going to be used by default.
+Please choose folder to use:
+ [1] default (id = b1gnobiebevf7he8kdau)
+ [2] Create a new folder
+Please enter your numeric choice: 2
+Please enter a folder name: netology
+Your current folder has been set to 'netology' (id = b1germtpul6t5a784q42).
+Do you want to configure a default Compute zone? [Y/n] 1
+Please enter 'yes' or 'no': yes
+Which zone do you want to use as a profile default?
+ [1] ru-central1-a
+ [2] ru-central1-b
+ [3] ru-central1-c
+ [4] Don't set default zone
+Please enter your numeric choice: 1
+Your profile default Compute zone has been set to 'ru-central1-a'.
+```
+#### 2.3 Создвние сети и подсети для packer
+```
+kadannr @ wcrow ~
+└─ $ ▶ yc vpc network create \
+> --name net \
+> --labels my-label=netology \
+> --description "my network via yc"
+id: enphcsq7cdh7su20a0gu
+folder_id: b1germtpul6t5a784q42
+created_at: "2022-09-10T04:15:31Z"
+name: net
+description: my network via yc
+labels:
+  my-label: netology
 
-Рекомендуемые регистраторы:
-  - [nic.ru](https://nic.ru)
-  - [reg.ru](https://reg.ru)
+kadannr @ wcrow ~
+└─ $ ▶ yc vpc subnet create \
+> --name my-subnet-a \
+> --zone ru-central1-a \
+> --range 10.1.2.0/24 \
+> --network-name net \
+> --description "my subnet via yc"
+id: e9b9ouoqgqn7vi9amqjq
+folder_id: b1germtpul6t5a784q42
+created_at: "2022-09-10T04:18:52Z"
+name: my-subnet-a
+description: my subnet via yc
+network_id: enphcsq7cdh7su20a0gu
+zone_id: ru-central1-a
+v4_cidr_blocks:
+- 10.1.2.0/24
 
-Цель:
-
-1. Получить возможность выписывать [TLS сертификаты](https://letsencrypt.org) для веб-сервера.
-
-Ожидаемые результаты:
-
-1. У вас есть доступ к личному кабинету на сайте регистратора.
-2. Вы зарезистрировали домен и можете им управлять (редактировать dns записи в рамках этого домена).
-
-### Создание инфраструктуры
-
-Для начала необходимо подготовить инфраструктуру в YC при помощи [Terraform](https://www.terraform.io/).
-
-Особенности выполнения:
-
-- Бюджет купона ограничен, что следует иметь в виду при проектировании инфраструктуры и использовании ресурсов;
-- Следует использовать последнюю стабильную версию [Terraform](https://www.terraform.io/).
-
-Предварительная подготовка:
-
-1. Создайте сервисный аккаунт, который будет в дальнейшем использоваться Terraform для работы с инфраструктурой с необходимыми и достаточными правами. Не стоит использовать права суперпользователя
-2. Подготовьте [backend](https://www.terraform.io/docs/language/settings/backends/index.html) для Terraform:
-   а. Рекомендуемый вариант: [Terraform Cloud](https://app.terraform.io/)  
-   б. Альтернативный вариант: S3 bucket в созданном YC аккаунте.
-3. Настройте [workspaces](https://www.terraform.io/docs/language/state/workspaces.html)
-   а. Рекомендуемый вариант: создайте два workspace: *stage* и *prod*. В случае выбора этого варианта все последующие шаги должны учитывать факт существования нескольких workspace.  
-   б. Альтернативный вариант: используйте один workspace, назвав его *stage*. Пожалуйста, не используйте workspace, создаваемый Terraform-ом по-умолчанию (*default*).
-4. Создайте VPC с подсетями в разных зонах доступности.
-5. Убедитесь, что теперь вы можете выполнить команды `terraform destroy` и `terraform apply` без дополнительных ручных действий.
-6. В случае использования [Terraform Cloud](https://app.terraform.io/) в качестве [backend](https://www.terraform.io/docs/language/settings/backends/index.html) убедитесь, что применение изменений успешно проходит, используя web-интерфейс Terraform cloud.
-
-Цель:
-
-1. Повсеместно применять IaaC подход при организации (эксплуатации) инфраструктуры.
-2. Иметь возможность быстро создавать (а также удалять) виртуальные машины и сети. С целью экономии денег на вашем аккаунте в YandexCloud.
-
-Ожидаемые результаты:
-
-1. Terraform сконфигурирован и создание инфраструктуры посредством Terraform возможно без дополнительных ручных действий.
-2. Полученная конфигурация инфраструктуры является предварительной, поэтому в ходе дальнейшего выполнения задания возможны изменения.
-
----
-### Установка Nginx и LetsEncrypt
-
-Необходимо разработать Ansible роль для установки Nginx и LetsEncrypt.
-
-**Для получения LetsEncrypt сертификатов во время тестов своего кода пользуйтесь [тестовыми сертификатами](https://letsencrypt.org/docs/staging-environment/), так как количество запросов к боевым серверам LetsEncrypt [лимитировано](https://letsencrypt.org/docs/rate-limits/).**
-
-Рекомендации:
-  - Имя сервера: `you.domain`
-  - Характеристики: 2vCPU, 2 RAM, External address (Public) и Internal address.
-
-Цель:
-
-1. Создать reverse proxy с поддержкой TLS для обеспечения безопасного доступа к веб-сервисам по HTTPS.
-
-Ожидаемые результаты:
-
-1. В вашей доменной зоне настроены все A-записи на внешний адрес этого сервера:
-    - `https://www.you.domain` (WordPress)
-    - `https://gitlab.you.domain` (Gitlab)
-    - `https://grafana.you.domain` (Grafana)
-    - `https://prometheus.you.domain` (Prometheus)
-    - `https://alertmanager.you.domain` (Alert Manager)
-2. Настроены все upstream для выше указанных URL, куда они сейчас ведут на этом шаге не важно, позже вы их отредактируете и укажите верные значения.
-2. В браузере можно открыть любой из этих URL и увидеть ответ сервера (502 Bad Gateway). На текущем этапе выполнение задания это нормально!
-
-___
-### Установка кластера MySQL
-
-Необходимо разработать Ansible роль для установки кластера MySQL.
-
-Рекомендации:
-  - Имена серверов: `db01.you.domain` и `db02.you.domain`
-  - Характеристики: 4vCPU, 4 RAM, Internal address.
-
-Цель:
-
-1. Получить отказоустойчивый кластер баз данных MySQL.
-
-Ожидаемые результаты:
-
-1. MySQL работает в режиме репликации Master/Slave.
-2. В кластере автоматически создаётся база данных c именем `wordpress`.
-3. В кластере автоматически создаётся пользователь `wordpress` с полными правами на базу `wordpress` и паролем `wordpress`.
-
-**Вы должны понимать, что в рамках обучения это допустимые значения, но в боевой среде использование подобных значений не приемлимо! Считается хорошей практикой использовать логины и пароли повышенного уровня сложности. В которых будут содержаться буквы верхнего и нижнего регистров, цифры, а также специальные символы!**
-
-___
-### Установка WordPress
-
-Необходимо разработать Ansible роль для установки WordPress.
-
-Рекомендации:
-  - Имя сервера: `app.you.domain`
-  - Характеристики: 4vCPU, 4 RAM, Internal address.
-
-Цель:
-
-1. Установить [WordPress](https://wordpress.org/download/). Это система управления содержимым сайта ([CMS](https://ru.wikipedia.org/wiki/Система_управления_содержимым)) с открытым исходным кодом.
+kadannr @ wcrow ~
+└─ $ ▶ yc config list
+service-account-key:
+  id: ajekf68rjm2msv30d112
+  service_account_id: ajel2fuobpf4jf8l98jl
+  created_at: "2022-04-17T15:53:47.747252807Z"
+  key_algorithm: RSA_2048
+cloud-id: b1gsgr4keg8cp3dtm059
+folder-id: b1germtpul6t5a784q42
+compute-default-zone: ru-central1-a
+```
+#### 2.4 Редактирование файла centos-7-base.json
+{
+  "builders": [
+    {
+      "disk_type": "network-nvme",
+      "folder_id": "b1germtpul6t5a784q42",
+      "image_description": "by packer",
+      "image_family": "centos",
+      "image_name": "centos-7-base",
+      "source_image_family": "centos-7",
+      "ssh_username": "centos",
+      "subnet_id": "e9b9ouoqgqn7vi9amqjq",
+      "token": "",
+      "type": "yandex",
+      "use_ipv4_nat": true,
+      "zone": "ru-central1-a"
+    }
+  ],
+  "provisioners": [
+    {
+      "inline": [
+        "sudo yum -y update",
+        "sudo yum -y install bridge-utils bind-utils iptables curl net-tools tcpdump rsync telnet openssh-server"
+      ],
+      "type": "shell"
+    }
+  ]
+}
+#### 2.2 Подготовка образа packer на yc
 
 
-По данным W3techs, WordPress используют 64,7% всех веб-сайтов, которые сделаны на CMS. Это 41,1% всех существующих в мире сайтов. Эту платформу для своих блогов используют The New York Times и Forbes. Такую популярность WordPress получил за удобство интерфейса и большие возможности.
 
-Ожидаемые результаты:
 
-1. Виртуальная машина на которой установлен WordPress и Nginx/Apache (на ваше усмотрение).
-2. В вашей доменной зоне настроена A-запись на внешний адрес reverse proxy:
-    - `https://www.you.domain` (WordPress)
-3. На сервере `you.domain` отредактирован upstream для выше указанного URL и он смотрит на виртуальную машину на которой установлен WordPress.
-4. В браузере можно открыть URL `https://www.you.domain` и увидеть главную страницу WordPress.
----
-### Установка Gitlab CE и Gitlab Runner
+### 3. Установка Nginx и LetsEncrypt
 
-Необходимо настроить CI/CD систему для автоматического развертывания приложения при изменении кода.
 
-Рекомендации:
-  - Имена серверов: `gitlab.you.domain` и `runner.you.domain`
-  - Характеристики: 4vCPU, 4 RAM, Internal address.
 
-Цель:
-1. Построить pipeline доставки кода в среду эксплуатации, то есть настроить автоматический деплой на сервер `app.you.domain` при коммите в репозиторий с WordPress.
+### 4. Установка кластера MySQL
 
-Подробнее об [Gitlab CI](https://about.gitlab.com/stages-devops-lifecycle/continuous-integration/)
 
-Ожидаемый результат:
 
-1. Интерфейс Gitlab доступен по https.
-2. В вашей доменной зоне настроена A-запись на внешний адрес reverse proxy:
-    - `https://gitlab.you.domain` (Gitlab)
-3. На сервере `you.domain` отредактирован upstream для выше указанного URL и он смотрит на виртуальную машину на которой установлен Gitlab.
-3. При любом коммите в репозиторий с WordPress и создании тега (например, v1.0.0) происходит деплой на виртуальную машину.
+### 5. Установка WordPress
 
-___
-### Установка Prometheus, Alert Manager, Node Exporter и Grafana
 
-Необходимо разработать Ansible роль для установки Prometheus, Alert Manager и Grafana.
 
-Рекомендации:
-  - Имя сервера: `monitoring.you.domain`
-  - Характеристики: 4vCPU, 4 RAM, Internal address.
+### 6. Установка Gitlab CE и Gitlab Runner
 
-Цель:
 
-1. Получение метрик со всей инфраструктуры.
 
-Ожидаемые результаты:
+### 7. Установка Prometheus, Alert Manager, Node Exporter и Grafana
 
-1. Интерфейсы Prometheus, Alert Manager и Grafana доступены по https.
-2. В вашей доменной зоне настроены A-записи на внешний адрес reverse proxy:
-  - `https://grafana.you.domain` (Grafana)
-  - `https://prometheus.you.domain` (Prometheus)
-  - `https://alertmanager.you.domain` (Alert Manager)
-3. На сервере `you.domain` отредактированы upstreams для выше указанных URL и они смотрят на виртуальную машину на которой установлены Prometheus, Alert Manager и Grafana.
-4. На всех серверах установлен Node Exporter и его метрики доступны Prometheus.
-5. У Alert Manager есть необходимый [набор правил](https://awesome-prometheus-alerts.grep.to/rules.html) для создания алертов.
-2. В Grafana есть дашборд отображающий метрики из Node Exporter по всем серверам.
-3. В Grafana есть дашборд отображающий метрики из MySQL (*).
-4. В Grafana есть дашборд отображающий метрики из WordPress (*).
 
-*Примечание: дашборды со звёздочкой являются опциональными заданиями повышенной сложности их выполнение желательно, но не обязательно.*
 
----
-## Что необходимо для сдачи задания?
-
-1. Репозиторий со всеми Terraform манифестами и готовность продемонстрировать создание всех ресурсов с нуля.
-2. Репозиторий со всеми Ansible ролями и готовность продемонстрировать установку всех сервисов с нуля.
-3. Скриншоты веб-интерфейсов всех сервисов работающих по HTTPS на вашем доменном имени.
-  - `https://www.you.domain` (WordPress)
-  - `https://gitlab.you.domain` (Gitlab)
-  - `https://grafana.you.domain` (Grafana)
-  - `https://prometheus.you.domain` (Prometheus)
-  - `https://alertmanager.you.domain` (Alert Manager)
-4. Все репозитории рекомендуется хранить на одном из ресурсов ([github.com](https://github.com) или [gitlab.com](https://gitlab.com)).
-
----
-## Как правильно задавать вопросы дипломному руководителю?
-
-**Что поможет решить большинство частых проблем:**
-
-1. Попробовать найти ответ сначала самостоятельно в интернете или в
-  материалах курса и ДЗ и только после этого спрашивать у дипломного
-  руководителя. Навык поиска ответов пригодится вам в профессиональной
-  деятельности.
-2. Если вопросов больше одного, то присылайте их в виде нумерованного
-  списка. Так дипломному руководителю будет проще отвечать на каждый из
-  них.
-3. При необходимости прикрепите к вопросу скриншоты и стрелочкой
-  покажите, где не получается.
-
-**Что может стать источником проблем:**
-
-1. Вопросы вида «Ничего не работает. Не запускается. Всё сломалось». Дипломный руководитель не сможет ответить на такой вопрос без дополнительных уточнений. Цените своё время и время других.
-2. Откладывание выполнения курсового проекта на последний момент.
-3. Ожидание моментального ответа на свой вопрос. Дипломные руководители работающие разработчики, которые занимаются, кроме преподавания, своими проектами. Их время ограничено, поэтому постарайтесь задавать правильные вопросы, чтобы получать быстрые ответы :)
