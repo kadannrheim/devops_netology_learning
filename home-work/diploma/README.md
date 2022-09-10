@@ -217,7 +217,7 @@ yc vpc subnet delete --name my-subnet-a && yc vpc network delete --name net
 
 
 
-#### 2
+#### 2 Создание статических ключей доступа https://cloud.yandex.ru/docs/iam/operations/sa/create-access-key
 #### 2
 #### 2
 #### 2
