@@ -194,12 +194,15 @@ v4_cidr_blocks:
 }
 ```
 #### 2.2.2 Подготовка образа packer на yc
+```
 kadannr @ wcrow ~/git/devops-netology/home-work/diploma/packer (main)
 └─ $ ▶ packer validate centos-7-base.json
 kadannr @ wcrow ~/git/devops-netology/home-work/diploma/packer (main)
 └─ $ ▶ packer build centos-7-base.json
 pic2
+```
 #### 2.2.3 Проверить наличие созданного образа
+```
 kadannr @ wcrow ~/git/devops-netology/home-work/diploma/packer (main)
 └─ $ ▶ yc compute image list
 +----------------------+---------------+--------+----------------------+--------+
@@ -207,17 +210,40 @@ kadannr @ wcrow ~/git/devops-netology/home-work/diploma/packer (main)
 +----------------------+---------------+--------+----------------------+--------+
 | fd8alk4v1vqelrt1aub5 | centos-7-base | centos | f2euv1kekdgvc0jrpaet | READY  |
 +----------------------+---------------+--------+----------------------+--------+
+```
 #### 2.2.4 Удаляем более не нужную сеть и подсеть
 ```
 yc vpc subnet delete --name my-subnet-a && yc vpc network delete --name net
 ```
-#### 2 terraform создание Yandex Object Storage в Object Storage "/Бакеты/Новый бакет"
+#### 2.3 Terraform. Создание статических ключей доступа https://cloud.yandex.ru/docs/iam/operations/sa/create-access-key
 
-#### 2 Сохраняем стостояние terraform в object Storage https://cloud.yandex.ru/docs/tutorials/infrastructure-management/terraform-state-storage
+#### 2.4 Создание Yandex Object Storage https://cloud.yandex.ru/docs/tutorials/infrastructure-management/terraform-state-storage#create-service-account
+- yc/Object Storage "/Бакеты/Новый бакет" (имя уникальное, так как может быть публичным). Имя понадобится для "providers.tr" в terraform.
+- Меняю "bucket", `key` произвольное.tfstate, `access_key` это идентификатор ключи доступа в сервисном аккаунте, `secret_key` секретный ключ ключа доступа в сервисном аккаунте (https://www.terraform.io/language/settings/backends/s3 https://cloud.yandex.ru/docs/iam/operations/sa/create-access-key):
+- `cat providers.tr`
+backend "s3" {
+    endpoint   = "storage.yandexcloud.net"
+    bucket     = "kadannrbucket"
+    region     = "ru-central1"
+    key        = "terraform.tfstate"
+    access_key = "YCAJEU5hzZFsQ3Eb1pAugSVVG"
+    secret_key = "YCO57777CZOBmbJgUYgFbX52qTApg_MguZTmUMH8"
+    skip_region_validation      = true
+    skip_credentials_validation = true
+   }
+}
 
-
-
-#### 2 Создание статических ключей доступа https://cloud.yandex.ru/docs/iam/operations/sa/create-access-key
+#### 2 Инициализирую terraform, создаю рабочую область и запускаю сборку.
+`yc iam key create --service-account-name my-robot --output key.json` в папке с terraform
+```
+cd terraform
+terraform init
+terraform workspace new stage
+terraform workspace select stage 
+terraform init -backend-config=backend.conf
+terraform plan
+terraform apply
+```
 #### 2
 #### 2
 #### 2
