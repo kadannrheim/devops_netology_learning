@@ -4,7 +4,7 @@
 nginx:
   hosts:
     nginx-01:
-      ansible_host: 62.84.126.91
+      ansible_host: 51.250.65.22
 database:
   children:
     master:
@@ -43,7 +43,7 @@ deployment:
     wordpress:
 gatewayed:
   vars:
-    ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q centos@62.84.126.91"'
+    ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q centos@51.250.65.22"'
   children:
     database:
     wordpress:
