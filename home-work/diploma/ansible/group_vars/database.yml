@@ -1,0 +1,3 @@
+mysql_root_pass: P@ssw0rd
+mysql_replication_user: repuserl
+mysql_replication_pass: P@ssw0rd

@@ -1,0 +1,4 @@
+---
+gitlab_initial_root_password: 'P@ssw0rd'
+gitlab_initial_shared_runners_registration_token: 'MyToken321'
+gitlab_runner_registration_token: "{{ gitlab_initial_shared_runners_registration_token }}"

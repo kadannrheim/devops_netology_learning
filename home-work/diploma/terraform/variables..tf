@@ -44,7 +44,7 @@ variable "zone2" {
 
 variable "image_id" {
   type = string
-  default = "заменить"
+  default = "fd8alk4v1vqelrt1aub5"
 }
 
 variable "subnet1" {
