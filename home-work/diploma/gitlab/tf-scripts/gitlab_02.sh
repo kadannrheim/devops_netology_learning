@@ -10,7 +10,7 @@ git --git-dir=../gitlab/wp-project/.git --work-tree=../gitlab/wp-project push
 git --git-dir=../gitlab/wp-project/.git --work-tree=../gitlab/wp-project push --tags
 echo "Wait 20 seconds gitlab-runner working"
 sleep 20
-echo "All should be done. You can check now https://www.dmitryzakharov.website"
+echo "All should be done. You can check now https://www.kadannr.website"
 
 
 # Применим теперь tag
