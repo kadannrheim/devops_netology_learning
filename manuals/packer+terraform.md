@@ -55,3 +55,4 @@ https://www.packer.io/downloads
   * terraform init && terraform validate && terraform plan
 * `terraform apply -auto-approve`
 * `terraform destroy -auto-approve` -удалить всё созданное
+

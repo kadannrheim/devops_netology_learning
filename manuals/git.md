@@ -93,3 +93,4 @@ kadannr@wcrow:~/git/devops-netology/home-work/virt-homeworks(main)$
 # Рабочие команды, связки
 `git commit -m 'name commit'` -закомитить
 `git push -u [name репозитория] [name ветки]` -пропушить
+`git reset --hard HEAD` -Отменить локальные изменения во всех файлах
