@@ -241,6 +241,7 @@ terraform init
 terraform workspace new stage
 terraform workspace select stage 
 terraform init -backend-config=backend.conf
+terraform validate
 terraform plan
 terraform apply
 ```

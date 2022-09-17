@@ -20,3 +20,4 @@ host_key_checking = False
 
 Но удалить запись всё-таки можно, командой:
 `$ ssh-keygen -R host.com`
+ssh-keygen -R 62.84.116.4
