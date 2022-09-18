@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 cd /var/www/wordpress
-/usr/local/bin/wp post create --post_title='Этот пост пришел из GitLab' \
---post_content='GitLab Runner работает, поэтому мы видим этот пост!' --post_status=publish
+/usr/local/bin/wp post create --post_title='Этот пост из GitLab' \
+--post_content='GitLab Runner работает!!!' --post_status=publish

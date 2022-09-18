@@ -10,10 +10,10 @@ git --git-dir=../gitlab/wp-project/.git --work-tree=../gitlab/wp-project add .
 git --git-dir=../gitlab/wp-project/.git --work-tree=../gitlab/wp-project commit -m 'init'
 export GIT_SSL_NO_VERIFY=1
 git --git-dir=../gitlab/wp-project/.git --work-tree=../gitlab/wp-project push -u origin master
-echo "All done. Wait 100 seconds before next CI/CD commit"
+echo "All done. Wait 110 seconds before next CI/CD commit"
 echo "You can visit the site now https://www.kadannr.website"
 echo "Waiting commit 2"
-sleep 100
+sleep 110
 
 
 # export GIT_SSL_NO_VERIFY=1
