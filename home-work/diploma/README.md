@@ -13,22 +13,54 @@
 ---
 ---
 ## Цели:
-
+0. Файловая структура
 1. Зарегистрировать доменное имя (любое на ваш выбор в любой доменной зоне).
-2. Подготовить инфраструктуру с помощью Terraform на базе облачного провайдера YandexCloud.
-3. Настроить внешний Reverse Proxy на основе Nginx и LetsEncrypt.
-4. Настроить кластер MySQL.
-5. Установить WordPress.
-6. Развернуть Gitlab CE и Gitlab Runner.
-7. Настроить CI/CD для автоматического развёртывания приложения.
-8. Настроить мониторинг инфраструктуры с помощью стека: Prometheus, Alert Manager и Grafana.
+2. Подготовить инфраструктуру с помощью Terraform на базе облачного провайдера YandexCloud.  
+  2.0  
+  ...  
+  2.5
+1. Настроить внешний Reverse Proxy на основе Nginx и LetsEncrypt.
+2. Настроить кластер MySQL.
+3. Установить WordPress.
+4. Развернуть Gitlab CE и Gitlab Runner.
+5. Настроить CI/CD для автоматического развёртывания приложения.
+6. Настроить мониторинг инфраструктуры с помощью стека: Prometheus, Alert Manager и Grafana.
+7.  Скриншоты  
+9.1 MySQL  
+9.2 WordPress  
+9.3 Gitlab  
+9.4 Prometheus, Alert Manager и Grafana  
 
 ---
 ---
+## 0. Файловая структура
+- ansible
+  - files
+  - group_vars
+  - inventory\stage.yam
+  - roles
+  - templates
+  - ansible.cfg -убрать ошибку с недоверенным подключением (надёжныей прописать в системе)
+  - site.yml
+- gitlab -скрипты и файлы wp
+- img -скриншоты
+- packer -настройки создания образа
+- terraform
+  - dns.tr -настройка записи.
+  - gitlab.tr -пути скриптов gitlab
+  - group_vars.tr -описание перменных и передача их в /ansible/group_vars/all.yml
+  - inventory.tr -описание подключения к хостам и передача в папку "ansible"
+  - key.json -ключ атунтификации на yc (лучше хранить в .gitignore, там же должно быть и подключение к провайдеру)
+  - main.tr -настройки для ansible
+  - network.tr -настройка сетей
+  - output.tr -выходные значения
+  - providers.tr -настройка для подключения провайдера
+  - variables.tr -переменные
+
 ## Этапы выполнения:
 
 ### 1. Регистрация доменного имени и пропись dns yandex
-sc1
+![](img/domen.jpg)
 
 ---
 ### 2. Создание инфраструктуры
@@ -160,7 +192,7 @@ v4_cidr_blocks:
 `yc vpc network --help` -Посмотрить описание команд CLI для работы с облачными сетями
 `yc vpc network list` -Получить список всех облачных сетей в каталоге, указанном в вашем профиле CLI
 `yc vpc network list --format yaml` -Получить тот же список c большим количеством деталей в формате YAML
-`yc config list`-Проверить настройки вашего профиля CLI
+`yc config list`-Проверить настройки профиля CLI
 
 ### 2.2 Создание образа с помощью packer
 ### 2.2.1 Редактирование файла centos-7-base.json ""folder_id"" и ""subnet_id""
@@ -221,7 +253,7 @@ yc vpc subnet delete --name my-subnet-a && yc vpc network delete --name net
 - yc/Object Storage "/Бакеты/Новый бакет" (имя уникальное, так как может быть публичным). Имя понадобится для "providers.tr" в terraform.
 - Меняю "bucket", `key` произвольное.tfstate, `access_key` это идентификатор ключи доступа в сервисном аккаунте, `secret_key` секретный ключ ключа доступа в сервисном аккаунте (https://www.terraform.io/language/settings/backends/s3 https://cloud.yandex.ru/docs/iam/operations/sa/create-access-key):
 - `cat providers.tr`
-backend "s3" {
+```backend "s3" {
     endpoint   = "storage.yandexcloud.net"
     bucket     = "kadannrbucket"
     region     = "ru-central1"
@@ -232,40 +264,57 @@ backend "s3" {
     skip_credentials_validation = true
    }
 }
+```
 
-#### 2 Инициализирую terraform, создаю рабочую область и запускаю сборку.
+#### 2.5 Инициализирую terraform, создаю рабочую область и запускаю сборку.
 `yc iam key create --service-account-name my-robot --output key.json` в папке с terraform
 ```
 cd terraform
 terraform init
 terraform workspace new stage
 terraform workspace select stage 
-terraform init -backend-config=backend.conf
-terraform validate
-terraform plan
+terraform validate && terraform plan
 terraform apply
 ```
-#### 2
-#### 2
-#### 2
-#### 2
-### 3. Установка Nginx и LetsEncrypt
+![](img/apply.jpg)
 
+![](img/yc.jpg)
 
+![](img/svr.jpg)
 
-### 4. Установка кластера MySQL
+![](img/dns.jpg)
 
+![](img/bucket.jpg)
+### 3. Установка Nginx и LetsEncrypt / ### 4. Установка кластера MySQL / ### 5. Установка WordPress / ### 6. Установка Gitlab CE и Gitlab Runner / ### 7. Установка Prometheus, Alert Manager, Node Exporter и Grafana
+- Все настройка прописаны в ansible [](ansible)
+- ansible/inventory/stage.yml -inventory для playbook
+- ansible/site.yml -сам playbook
+- gitlab/tf-scripts/gitlab_01.sh и gitlab/tf-scripts/gitlab_02.sh -скрипты для giltab
+## Скриншоты 
+### 8.1 MySQL
+`ansible-playbook -i ../ansible/inventory/stage.yml -t mysql ../ansible/site.yml`
+[](ansible/inventory/stage.yml)
+[](ansible/site.yml)
 
+![](img/mysql1.jpg)
+![](img/mysql2.jpg)
+![](img/mysql3.jpg)
+### 8.2 Установка WordPress
+https://www.kadannr.website/
+![](img/wordpress.jpg)
 
-### 5. Установка WordPress
+### 8.3 Установка Gitlab CE и Gitlab Runner
+https://gitlab.kadannr.website/
+![](img/gitlab.jpg)
 
+### 8.4 Установка Prometheus, Alert Manager, Node Exporter и Grafana
+https://prometheus.kadannr.website/
+![](img/prometheus.jpg)
 
+https://alertmanager.kadannr.website./
+![](img/altermanager.jpg)
 
-### 6. Установка Gitlab CE и Gitlab Runner
-
-
-
-### 7. Установка Prometheus, Alert Manager, Node Exporter и Grafana
-
+https://grafana.kadannr.website/
+![](img/grafana.jpg)
 
 
