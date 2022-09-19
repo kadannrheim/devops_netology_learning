@@ -259,7 +259,7 @@ yc vpc subnet delete --name my-subnet-a && yc vpc network delete --name net
     region     = "ru-central1"
     key        = "terraform.tfstate"
     access_key = "YCAJEU5hzZFsQ3Eb1pAugSVVG"
-    secret_key = "YCO57777CZOBmbJgUYgFbX52qTApg_MguZTmUMH8"
+    secret_key = "YCO57777**********gFbX52qTApg_MguZTmUMH8"
     skip_region_validation      = true
     skip_credentials_validation = true
    }
@@ -285,7 +285,7 @@ terraform apply
 ![](img/dns.jpg)
 
 ![](img/bucket.jpg)
-### 3. Установка Nginx и LetsEncrypt / ### 4. Установка кластера MySQL / ### 5. Установка WordPress / ### 6. Установка Gitlab CE и Gitlab Runner / ### 7. Установка Prometheus, Alert Manager, Node Exporter и Grafana
+### 3. Установка Nginx и LetsEncrypt / 4. Установка кластера MySQL / 5. Установка WordPress / 6. Установка Gitlab CE и Gitlab Runner / 7. Установка Prometheus, Alert Manager, Node Exporter и Grafana
 - Все настройка прописаны в ansible [](ansible)
 - ansible/inventory/stage.yml -inventory для playbook
 - ansible/site.yml -сам playbook
