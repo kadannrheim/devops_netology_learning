@@ -19,17 +19,18 @@
   2.0  
   ...  
   2.5
-1. Настроить внешний Reverse Proxy на основе Nginx и LetsEncrypt.
-2. Настроить кластер MySQL.
-3. Установить WordPress.
-4. Развернуть Gitlab CE и Gitlab Runner.
-5. Настроить CI/CD для автоматического развёртывания приложения.
-6. Настроить мониторинг инфраструктуры с помощью стека: Prometheus, Alert Manager и Grafana.
-7.  Скриншоты  
+3. Настроить внешний Reverse Proxy на основе Nginx и LetsEncrypt.
+4. Настроить кластер MySQL.
+5. Установить WordPress.
+6. Развернуть Gitlab CE и Gitlab Runner.
+7. Настроить CI/CD для автоматического развёртывания приложения.
+8. Настроить мониторинг инфраструктуры с помощью стека: Prometheus, Alert Manager и Grafana.
+9.  Скриншоты  
 9.1 MySQL  
 9.2 WordPress  
 9.3 Gitlab  
 9.4 Prometheus, Alert Manager и Grafana  
+9.5 TLS
 
 ---
 ---
@@ -285,13 +286,13 @@ terraform apply
 ![](img/dns.jpg)
 
 ![](img/bucket.jpg)
-### 3. Установка Nginx и LetsEncrypt / 4. Установка кластера MySQL / 5. Установка WordPress / 6. Установка Gitlab CE и Gitlab Runner / 7. Установка Prometheus, Alert Manager, Node Exporter и Grafana
+### 3. Установка Nginx и LetsEncrypt. / 4. Установка кластера MySQL. / 5. Установка WordPress. / 6. Развернуть Gitlab CE и Gitlab Runner. / 7. Настроить CI/CD для автоматического развёртывания приложения. / 8. Установка Prometheus, Alert Manager, Node Exporter и Grafana.
 - Все настройка прописаны в ansible [](ansible)
 - ansible/inventory/stage.yml -inventory для playbook
 - ansible/site.yml -сам playbook
 - gitlab/tf-scripts/gitlab_01.sh и gitlab/tf-scripts/gitlab_02.sh -скрипты для giltab
 ## Скриншоты 
-### 8.1 MySQL
+### 9.1 MySQL
 `ansible-playbook -i ../ansible/inventory/stage.yml -t mysql ../ansible/site.yml`
 [](ansible/inventory/stage.yml)
 [](ansible/site.yml)
@@ -299,15 +300,15 @@ terraform apply
 ![](img/mysql1.jpg)
 ![](img/mysql2.jpg)
 ![](img/mysql3.jpg)
-### 8.2 Установка WordPress
+### 9.2 Установка WordPress
 https://www.kadannr.website/
 ![](img/wordpress.jpg)
 
-### 8.3 Установка Gitlab CE и Gitlab Runner
+### 9.3 Установка Gitlab CE и Gitlab Runner
 https://gitlab.kadannr.website/
 ![](img/gitlab.jpg)
 
-### 8.4 Установка Prometheus, Alert Manager, Node Exporter и Grafana
+### 9.4 Установка Prometheus, Alert Manager, Node Exporter и Grafana
 https://prometheus.kadannr.website/
 ![](img/prometheus.jpg)
 
@@ -316,5 +317,8 @@ https://alertmanager.kadannr.website./
 
 https://grafana.kadannr.website/
 ![](img/grafana.jpg)
+
+### 9.5 TLS
+![](img/tls.jpg)
 
 
