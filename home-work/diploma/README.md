@@ -30,7 +30,7 @@
 9.2 WordPress  
 9.3 Gitlab  
 9.4 Prometheus, Alert Manager и Grafana  
-9.5 TLS
+9.5 Сертификат LetsEncrypt
 
 ---
 ---
@@ -41,7 +41,7 @@
   - inventory\stage.yam
   - roles
   - templates
-  - ansible.cfg -убрать ошибку с недоверенным подключением (надёжныей прописать в системе)
+  - ansible.cfg -убрать ошибку с недоверенным подключением (надёжныей прописать в системе /etc/ansible/ansible.cfg)
   - site.yml
 - gitlab -скрипты и файлы wp
 - img -скриншоты
@@ -57,6 +57,7 @@
   - output.tr -выходные значения
   - providers.tr -настройка для подключения провайдера
   - variables.tr -переменные
+    - здесь же на релизе убрать "letsencrypttest" и поставить "letsencrypt" (если часто запрашивать заблокируют и не дадут сертификат)
 
 ## Этапы выполнения:
 
@@ -318,7 +319,7 @@ https://alertmanager.kadannr.website./
 https://grafana.kadannr.website/
 ![](img/grafana.jpg)
 
-### 9.5 TLS
-![](img/tls.jpg)
+### 9.5 Сертификат LetsEncrypt
+![](img/letsencrypt.jpg)
 
 
