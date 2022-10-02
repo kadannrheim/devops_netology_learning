@@ -158,6 +158,7 @@ folder-id: b1germtpul6t5a784q42
 compute-default-zone: ru-central1-a
 ```
 ### 2.1.9 Создание сети для packer
+```
 kadannr @ wcrow ~
 └─ $ ▶ yc vpc network create \
 > --name net \
@@ -170,6 +171,8 @@ name: net
 description: my network via yc
 labels:
   my-label: netology
+```
+
 #### 2.1.10 Создание подсети для packer
 ```
 kadannr @ wcrow ~
@@ -191,10 +194,10 @@ v4_cidr_blocks:
 ```
 
 ### 2.1.11 Команды вывода информации
-`yc vpc network --help` -Посмотрить описание команд CLI для работы с облачными сетями
-`yc vpc network list` -Получить список всех облачных сетей в каталоге, указанном в вашем профиле CLI
-`yc vpc network list --format yaml` -Получить тот же список c большим количеством деталей в формате YAML
-`yc config list`-Проверить настройки профиля CLI
+`yc vpc network --help` -Посмотрить описание команд CLI для работы с облачными сетями  
+`yc vpc network list` -Получить список всех облачных сетей в каталоге, указанном в вашем профиле CLI  
+`yc vpc network list --format yaml` -Получить тот же список c большим количеством деталей в формате YAML  
+`yc config list`-Проверить настройки профиля CLI  
 
 ### 2.2 Создание образа с помощью packer
 ### 2.2.1 Редактирование файла centos-7-base.json ""folder_id"" и ""subnet_id""
@@ -252,8 +255,8 @@ yc vpc subnet delete --name my-subnet-a && yc vpc network delete --name net
 #### 2.3 Terraform. Создание статических ключей доступа https://cloud.yandex.ru/docs/iam/operations/sa/create-access-key
 
 #### 2.4 Создание Yandex Object Storage https://cloud.yandex.ru/docs/tutorials/infrastructure-management/terraform-state-storage#create-service-account
-- yc/Object Storage "/Бакеты/Новый бакет" (имя уникальное, так как может быть публичным). Имя понадобится для "providers.tr" в terraform.
-- Меняю "bucket", `key` произвольное.tfstate, `access_key` это идентификатор ключи доступа в сервисном аккаунте, `secret_key` секретный ключ ключа доступа в сервисном аккаунте (https://www.terraform.io/language/settings/backends/s3 https://cloud.yandex.ru/docs/iam/operations/sa/create-access-key):
+- yc/Object Storage "/Бакеты/Новый бакет" (имя уникальное, так как может быть публичным). Имя понадобится для "providers.tr" в terraform.  
+- Меняю "bucket", `key` произвольное.tfstate, `access_key` это идентификатор ключи доступа в сервисном аккаунте, `secret_key` секретный ключ ключа доступа в сервисном аккаунте (https://www.terraform.io/language/settings/backends/s3 https://cloud.yandex.ru/docs/iam/operations/sa/create-access-key):  
 - `cat providers.tr`
 ```backend "s3" {
     endpoint   = "storage.yandexcloud.net"
