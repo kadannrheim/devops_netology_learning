@@ -307,7 +307,13 @@ https://www.kadannr.website/
 
 ### 9.3 Установка Gitlab CE и Gitlab Runner
 https://gitlab.kadannr.website/
-![](img/gitlab.jpg)
+![](img/gitlab_rep.jpg)
+
+### Gitlab jobs
+![](img/gitlab_jobs.jpg)
+
+### Gitlab pipelines
+![](img/gitlab_pipelines.jpg)
 
 ### 9.4 Установка Prometheus, Alert Manager, Node Exporter и Grafana
 https://prometheus.kadannr.website/
