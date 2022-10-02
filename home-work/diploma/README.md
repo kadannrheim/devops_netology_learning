@@ -308,6 +308,9 @@ terraform apply
 https://www.kadannr.website/
 ![](img/wordpress.jpg)
 
+
+![](img/wordpress_post2.jpg)
+
 ### 9.3 Установка Gitlab CE и Gitlab Runner
 https://gitlab.kadannr.website/
 ![](img/gitlab_rep.jpg)
